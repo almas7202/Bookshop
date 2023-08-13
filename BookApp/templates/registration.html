@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+<body>
+	<!-- <div class="page-wraper">
+		<div id="loading-area" class="preloader-wrapper-1">
+			<div class="preloader-inner">
+				<div class="preloader-shade"></div>
+				<div class="preloader-wrap"></div>
+				<div class="preloader-wrap wrap2"></div>
+				<div class="preloader-wrap wrap3"></div>
+				<div class="preloader-wrap wrap4"></div>
+				<div class="preloader-wrap wrap5"></div>
+			</div> 
+		</div> -->
+		<!-- Header -->
+		
+		
+		<div class="page-content">
+			<!-- inner page banner -->
+			<div class="dz-bnr-inr overlay-secondary-dark dz-bnr-inr-sm" style="background-image:url(images/background/bg3.jpg);">
+				<div class="container">
+					<div class="dz-bnr-inr-entry">
+						<h1>Registration</h1>
+						<nav aria-label="breadcrumb" class="breadcrumb-row">
+							<ul class="breadcrumb">
+								<li class="breadcrumb-item"><a href="index.html"> Home</a></li>
+								<li class="breadcrumb-item">Registration</li>
+							</ul>
+						</nav>
+					</div>
+				</div>
+			</div>
+			<!-- inner page banner End-->
+			
+			<!-- contact area -->
+			<section class="content-inner shop-account">
+				<!-- Product -->
+				<div class="container">
+					<div class="row justify-content-center">
+						<div class="col-lg-6 col-md-6 mb-4">
+							<div class="login-area">
+								
+								<form method="POST">
+									{% csrf_token %}
+									{% if form.errors %}
+									<div class="alert alert-danger">
+										<strong>Oops! Something went wrong:</strong>
+										<ul>
+											{% for field in form %} {% for error in field.errors %}
+											<li>{{ field.label }}: {{ error }}</li>
+											{% endfor %} {% endfor %}
+										</ul>
+									</div>
+									{% endif %}
+									<h4 class="text-secondary">Registration</h4>
+									<p class="font-weight-600">If you don't have an account with us, please Registration.</p>
+									<div class="mb-4">
+										<label class="label-title">Username *</label>
+										<!-- <input name="dzName" required="" class="form-control" placeholder="Your Username" type="text"> -->
+										{{form.username}}
+									</div>
+									<div class="mb-4">
+										<label class="label-title">First Name *</label>
+									
+										 {{form.first_name}}
+									</div>
+									<div class=" mb-4">
+										<label class="label-title">Last Name *</label>
+										{{form.last_name}}
+									</div>
+									<div class="mb-4">
+										<label class="label-title">Email *</label>
+										{{form.email}}
+									</div>
+									<div class="mb-4">
+										<label class="label-title">Password1 *</label>
+										{{form.password1}}
+									</div>
+									<div class="mb-4">
+										<label class="label-title">Password2 *</label>
+										{{form.password2}}
+									</div>
+							
+									<div class="mb-5">
+										<small>Your personal data will be used to support your experience throughout this website, to manage access to your account, and for other purposes described in our <a href="privacy-policy.html">privacy policy</a>.</small>
+									</div>
+									<div class="text-left">
+										<button type="su" class="btn btn-primary btnhover w-100 me-2">Register</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- Product END -->
+			</section>
+			<!-- contact area End--> 
+		</div>
+		
+		>
+			
+			
+			
+			
+		
+		
+		<!-- <button class="scroltop" type="button"><i class="fas fa-arrow-up"></i></button> -->
+	</div>
+	
+
+
+
+</body>
+	
+{% endblock body %}
+	
+
+
+
+<!-- Mirrored from bookland.dexignzone.com/xhtml/shop-registration.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 12 Aug 2023 16:57:28 GMT -->
+</html>
