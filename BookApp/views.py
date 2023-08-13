@@ -23,7 +23,7 @@ def registerview(request):
 
 
 def loginview(request):
-    if request.method == 'POST':
+    if request.method == 'POST': #this is post Request
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
