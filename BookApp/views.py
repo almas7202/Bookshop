@@ -23,7 +23,7 @@ def registerview(request):
 
 
 def loginview(request):
-    if request.method == 'POST':
+    if request.method == 'POST': 
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
@@ -33,3 +33,27 @@ def loginview(request):
         else:
             messages.error(request, 'Invalid credentials. Please try again.')
     return render(request, 'login.html')
+
+def shopview(request):
+    return render(request,'books-grid-view.html')
+
+def cartview(request):
+    return render(request,'shop-cart.html')
+
+def booklistview(request):
+    return render(request,'books-list.html')
+
+def checkoutview(request):
+    return render(request,'shop-checkout.html')
+
+def wishlistview(request):
+    return render(request,'wishlist.html')
+
+def profileview(request):
+    return render(request,'my-profile.html')
+    
+
+
+
+
+ #commment BY   
