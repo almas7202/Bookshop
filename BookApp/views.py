@@ -1,3 +1,4 @@
+# Trial and Error
 from django.shortcuts import render,redirect
 from .form import *
 from django.contrib.auth import authenticate, login, logout
@@ -50,9 +51,3 @@ def wishlistview(request):
 
 def profileview(request):
     return render(request,'my-profile.html')
-    
-
-
-
-
- #commment BY   
