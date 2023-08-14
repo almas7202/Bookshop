@@ -3,7 +3,6 @@ from .form import *
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
-# Create your views here.
 def baseview(request):
     return render(request,'base.html')
 
