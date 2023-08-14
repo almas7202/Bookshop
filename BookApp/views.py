@@ -1,3 +1,4 @@
+# Trial and Error
 from django.shortcuts import render,redirect
 from .form import *
 from django.contrib.auth import authenticate, login, logout
