@@ -51,9 +51,14 @@ def wishlistview(request):
 
 def profileview(request):
     return render(request,'my-profile.html')
+<<<<<<< HEAD
     
 
 
 
 
  #commment BY   
+=======
+# COMMENT BY AAMIR
+# Another Comment
+>>>>>>> 7ad63564d3afdd42414a8906fcce3374cdec7818
