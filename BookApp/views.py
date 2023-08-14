@@ -2,7 +2,6 @@ from django.shortcuts import render,redirect
 from .form import *
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-# Message by aamir
 
 # Create your views here.
 def baseview(request):
