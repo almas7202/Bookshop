@@ -50,9 +50,10 @@ def wishlistview(request):
     return render(request,'wishlist.html')
 
 def profileview(request):
-<<<<<<< HEAD
     return render(request,'my-profile.html')
     
-=======
-    return render(request,'my-profile.html')
->>>>>>> 8cedb0d245000837664587db3c44aa4d7a5845f1
+
+
+
+
+ #commment BY   
