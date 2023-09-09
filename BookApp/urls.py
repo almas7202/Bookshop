@@ -12,7 +12,11 @@ urlpatterns = [
     path('booklist/',views.booklistview,name='booklistview'),
     path('checkout/',views.checkoutview,name='checkoutview'),
     path('wishlist/',views.wishlistview,name='wishlistview'),
-    path('profile/',views.profileview,name='profileview')
+    path('profile/',views.profileview,name='profileview'),
+    path('add_to_cart/<int:isbn_id>/', views.add_to_cart, name='add_to_cart'),
+
+    
+
 
 
 
