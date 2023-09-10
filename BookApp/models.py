@@ -16,3 +16,4 @@ class Book(models.Model):
     averageRating = models.FloatField()
     ratingsCount = models.IntegerField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
+
