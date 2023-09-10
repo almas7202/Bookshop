@@ -195,7 +195,7 @@ def profileview(request):
     
 
 
-from .models import ShoppingCartItem
+# from .models import ShoppingCartItem
 
 def add_to_cart(request, isbn_id):
     # Get the book details from your database or API
