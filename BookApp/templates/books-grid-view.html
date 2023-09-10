@@ -119,14 +119,15 @@
 
 
 						{% for i in page %}
-						
+
 						<div class="col-book style-1">
 							<div class="dz-shop-card style-1">
 								<div class="dz-media">
 									{% if i.thumbnail_link %}
-										<img src="{{ i.thumbnail_link }}" alt="{{ i.title }} Cover" width="500" height="600" >
+									<img src="{{ i.thumbnail_link }}" alt="{{ i.title }} Cover" width="500"
+										height="600">
 									{% else %}
-										<p class="no-image">No cover image available</p>
+									<p class="no-image">No cover image available</p>
 									{% endif %}
 								</div>
 								<div class="bookmark-btn style-2">
@@ -153,16 +154,16 @@
 											<span class="price-num">₹{{ i.price }}</span>
 											<!-- <del>$70.00</del> -->
 										</div>
-										{% if isbn.id %}
-    <a href="{% url 'add_to_cart' isbn.id %}" class="btn btn-secondary box-btn btnhover btnhover2">
-        <i class="flaticon-shopping-cart-1 m-r10"></i> Add to Cart
-    </a>
-{% endif %}
+
+										<a href=""
+											class="btn btn-secondary box-btn btnhover btnhover2">
+											<i class="flaticon-shopping-cart-1 m-r10"></i> Add to Cart
+										</a>
 									</div>
 								</div>
 							</div>
 						</div>
-						
+
 						{% endfor %}
 
 					</div>
