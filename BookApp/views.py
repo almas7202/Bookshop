@@ -168,23 +168,28 @@ def profileview(request):
 
 # from .models import ShoppingCartItem
 
-def add_to_cart(request, isbn_id):
-    # Get the book details from your database or API
-    book = ShoppingCartItem.objects.get(pk=isbn_id)
-
-    # Create or update a shopping cart item for the user
-    cart_item, created = ShoppingCartItem.objects.get_or_create(
-        user=request.user,
-        isbn=isbn,
-        book_title=book.title,
-        price=book.price,
-    )
-
-    if not created:
-        cart_item.quantity += 1
-        cart_item.save()
-
-    return redirect('/shop/')
+def add_to_cart(request, id):
+    if request.user.is_authenticated:
+        user=request.user
+        cart_items=Cart.objects.filter(user=request.user)
+        get_product=Book.objects.get(id=id)
+        is_in=Cart.objects.filter(
+            user=request.user,
+            book=get_product
+        ).exists()
+        if is_in:
+            for i in cart_items:
+                i.quantity += 1
+                i.save()
+        else:
+            Cart(
+                user=request.user,
+                book=get_product
+            ).save()
+    else:
+        messages.error(request, 'Please Login First to add item in cart !!!')
+        return redirect('/login/')
+    return redirect('/cart/')
 
 def view_cart(request):
     cart_items = ShoppingCartItem.objects.filter(user=request.user)
