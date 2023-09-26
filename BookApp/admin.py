@@ -6,8 +6,6 @@ class BookAdmin(admin.ModelAdmin):
 
 admin.site.register(Book, BookAdmin)
 
-
-
 class CartAdmin(admin.ModelAdmin):
     list_display = ["quantity", "product", "user"][::-1]
 admin.site.register(Cart)
