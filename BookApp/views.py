@@ -22,12 +22,11 @@ def baseview(request):
     return render(request,'base.html')
 
 
-<<<<<<< HEAD
-#hello From anisha
+
 
 def indexview(request):
     return render(request,'index.html')
-=======
+
 def generate_random_price():
     return round(random.uniform(350, 850))  # Generates a random price with two decimal places
 
@@ -94,7 +93,7 @@ def indexview(request):
     context = {'books': books,'r_books':r_books}
 
     return render(request,'index.html',context)
->>>>>>> 4437c487541b2a56061857ed04e4da6a82916e0b
+
 
 def registerview(request):
     if request.method == 'POST':
