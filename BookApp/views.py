@@ -4,6 +4,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.core.paginator import Paginator
 
+from .models import *
+
 import requests
 import random
 
@@ -135,46 +137,15 @@ def loginview(request):
         return render(request, 'books-grid-view.html', {'categories': []})
 
 def shopview(request):
-    google_books_api_key = 'AIzaSyBOgiz9kM8HnX1vtgT8106HgGSOUQ2e7Y4'
+    book_list = Book.objects.all()  # Get all books from the database
+    paginator = Paginator(book_list, 52)  # Create a Paginator object with 50 books per page
 
-    categories = ['Mystery', 'Horror', 'Fairytale', 'Satire', 'Poetry']  # Replace with actual categories
+    page_number = request.GET.get('page')  # Get the page number from the request
+    page_obj = paginator.get_page(page_number)  # Get the Page object for the requested page
 
-    books = []
-
-    for category in categories:
-        url = f'https://www.googleapis.com/books/v1/volumes?q=subject:{category}&maxResults=12&key={google_books_api_key}'
-
-        try:
-            response = requests.get(url)
-            data = response.json()
-
-            if 'items' in data:
-                for item in data['items']:
-                    book = item['volumeInfo']
-                    book['category'] = category
-                    book['price'] = round(random.uniform(350, 870))  # Random price between $350 and $870
-
-
-                    if 'imageLinks' in book:
-                        # Extract the thumbnail image link
-                        thumbnail_link = book['imageLinks'].get('thumbnail')
-                        book['thumbnail_link'] = thumbnail_link
-                    books.append(book)
-
-            print(books)
-
-        except Exception as e:
-            print(f"Error fetching books: {str(e)}")
-
-    # Create a Paginator instance with 12 books per page
-    paginator = Paginator(books, 12)
-    page_number = request.GET.get('page')  # Get the current page number from the request
-
-    # Get the Page object for the current page
-    page = paginator.get_page(page_number)
-
-    context = {'page': page}
-
+    context = {
+        'page_obj': page_obj,
+    }
     return render(request, 'books-grid-view.html', context)
 
 
@@ -197,23 +168,28 @@ def profileview(request):
 
 # from .models import ShoppingCartItem
 
-def add_to_cart(request, isbn_id):
-    # Get the book details from your database or API
-    book = ShoppingCartItem.objects.get(pk=isbn_id)
-
-    # Create or update a shopping cart item for the user
-    cart_item, created = ShoppingCartItem.objects.get_or_create(
-        user=request.user,
-        isbn=isbn,
-        book_title=book.title,
-        price=book.price,
-    )
-
-    if not created:
-        cart_item.quantity += 1
-        cart_item.save()
-
-    return redirect('/shop/')
+def add_to_cart(request, id):
+    if request.user.is_authenticated:
+        user=request.user
+        cart_items=Cart.objects.filter(user=request.user)
+        get_product=Book.objects.get(id=id)
+        is_in=Cart.objects.filter(
+            user=request.user,
+            book=get_product
+        ).exists()
+        if is_in:
+            for i in cart_items:
+                i.quantity += 1
+                i.save()
+        else:
+            Cart(
+                user=request.user,
+                book=get_product
+            ).save()
+    else:
+        messages.error(request, 'Please Login First to add item in cart !!!')
+        return redirect('/login/')
+    return redirect('/cart/')
 
 def view_cart(request):
     cart_items = ShoppingCartItem.objects.filter(user=request.user)
