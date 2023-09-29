@@ -42,68 +42,67 @@
 							<div class="col-lg-6 col-md-6">
 								<div class="widget">
 									<h4 class="widget-title">Billing & Shipping Address</h4>
+									
+									<form method="post" action="{% url 'checkoutview' %}" novalidate>
+
+									{% csrf_token %}
+									{% if form.errors %}
+									<div class="alert alert-danger">
+										<strong>Oops! Something went wrong:</strong>
+										<ul>
+											{% for field in form %} {% for error in field.errors %}
+											<li>{{ field.label }}: {{ error }}</li>
+											{% endfor %} {% endfor %}
+										</ul>
+									</div>
+									{% endif %}
+									<div class="row">
+										<div class="form-group col-md-6">
+											{{form1.fname}}
+										</div>
+										<div class="form-group col-md-6">
+											<!-- <input type="text" class="form-control" placeholder="Last Name">
+											 -->
+											 {{form1.lname}}
+										</div>
+									</div>
+									
 									<div class="form-group">
-										<select class="default-select">
-											<option value="1">Åland Islands</option>
-											<option value="2">Afghanistan</option>
-											<option value="3">Albania</option>
-											<option value="4">Algeria</option>
-											<option value="5">Andorra</option>
-											<option value="6">Angola</option>
-											<option value="7">Anguilla</option>
-											<option value="8">Antarctica</option>
-											<option value="9">Antigua and Barbuda</option>
-											<option value="10">Argentina</option>
-											<option value="11">Armenia</option>
-											<option value="12">Aruba</option>
-											<option value="13">Australia</option>
-										</select>	
+										<!-- <input type="text" class="form-control" placeholder="Address"> -->
+										{{form1.add1}}
 									</div>
 									<div class="row">
 										<div class="form-group col-md-6">
-											<input type="text" class="form-control" placeholder="First Name">
+											<!-- <input type="text" class="form-control" placeholder="Apartment, suite, unit etc."> -->
+											{{form1.add2}}
 										</div>
 										<div class="form-group col-md-6">
-											<input type="text" class="form-control" placeholder="Last Name">
-										</div>
-									</div>
-									<div class="form-group">
-										<input type="text" class="form-control" placeholder="Company Name">
-									</div>
-									<div class="form-group">
-										<input type="text" class="form-control" placeholder="Address">
-									</div>
-									<div class="row">
-										<div class="form-group col-md-6">
-											<input type="text" class="form-control" placeholder="Apartment, suite, unit etc.">
-										</div>
-										<div class="form-group col-md-6">
-											<input type="text" class="form-control" placeholder="Town / City">
+											<!-- <input type="text" class="form-control" placeholder="Town / City"> -->
+											{{form1.city}}
 										</div>
 									</div>
 									<div class="row">
 										<div class="form-group col-md-6">
-											<input type="text" class="form-control" placeholder="State / County">
+											<!-- <input type="text" class="form-control" placeholder="State / County"> -->
+											{{form1.state}}
 										</div>
 										<div class="form-group col-md-6">
-											<input type="text" class="form-control" placeholder="Postcode / Zip">
+											<!-- <input type="text" class="form-control" placeholder="Postcode / Zip"> -->
+											{{form1.zipcode}}
 										</div>
 									</div>
 									<div class="row">
 										<div class="form-group col-md-6">
-											<input type="email" class="form-control" placeholder="Email">
+											<!-- <input type="email" class="form-control" placeholder="Email"> -->
+											{{form1.email}}
 										</div>
 										<div class="form-group col-md-6">
-											<input type="text" class="form-control" placeholder="Phone">
+											<!-- <input type="text" class="form-control" placeholder="Phone"> -->
+											{{form1.mobile}}
 										</div>
 									</div>
-									<button class="btn btn-primary btnhover mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#create-an-account">Create an account <i class="fa fa-arrow-circle-o-down"></i></button>
-									<div id="create-an-account" class="collapse">
-										<p>Create an account by entering the information below. If you are a returning customer please login at the top of the page.</p>
-										<div class="form-group">
-											<input type="password" class="form-control" placeholder="Password">
-										</div>
-									</div>
+									<button class="btn btn-primary btnhover mb-3" type="submit"> Save <i class="fa fa-arrow-circle-o-down"></i></button>
+								</form>	
 								</div>
 							</div>
 							<div class="col-lg-6 col-md-6">
