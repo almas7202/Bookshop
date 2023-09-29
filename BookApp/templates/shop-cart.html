@@ -54,21 +54,29 @@
 								
 								{% for i in cart_data %}
 									<tr>
-										<td class="product-item-img"><img src={i.Book.image.url} alt=""></td>
+										<td class="product-item-img">
+											{% if i.Book.thumbnail != '' %}
+									          <img src="{{ i.book.thumbnail}}">
+									{% else %}
+									<p class="no-image">No cover image available</p>
+									{% endif %}
+										</td>
 										<td class="product-item-name">{{i.book.title}}</td>
 										<td class="product-item-price">₹{{i.book.price}}</td>
 										<td class="product-item-quantity">
-											<div class="quantity btn-quantity style-1 me-3">
+											<div class="quantity btn-quantity style-1 me-2">
 												<form method="post" action="{% url 'cartview' %}">
 													{% csrf_token %}
 													<input type="hidden" name="product_id" value="{{ i.book.id }}">
-													<input type="number" name="quantity" value="{{ i.quantity }}" min="1">
-													<button class="btn btn-primary btnhover" type="submit">Update Quantity</button>
+													<input type="number" name="quantity" value="{{ i.quantity }}" size="20" min="1">
+													<button class="btn btn-primary btnhover btn-sm" type="submit" style="margin-bottom:6px">Update Quantity</button>
 												</form>
 											</div>
+											
 										</td>
 										<td class="product-item-totle">{{i.product_total}}</td>
-										<td class="product-item-close"><a href="javascript:void(0);" class="ti-close"></a></td>
+										<!-- <td class="product-item-close"><a href="javascript:void(0);" class="ti-close"></a></td> -->
+										<td class="product-item-close"><a href="{% url 'rem_cart' i.id %}"><i class="fa fa-times"></i></a></td>
 									</tr>
 									{% endfor %}	
 								</tbody>

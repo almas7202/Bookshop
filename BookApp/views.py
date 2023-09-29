@@ -21,8 +21,7 @@ def generate_random_price():
 
 def baseview(request):
     return render(request,'base.html')
-
-
+    
 def generate_random_price():
     return round(random.uniform(350, 850))  # Generates a random price with two decimal places
 
@@ -99,10 +98,6 @@ def loginview(request):
         else:
             messages.error(request, 'Invalid credentials. Please try again.')
     return render(request, 'login.html')
-
-
-
-
     
 def shopview(request):
     book_list = Book.objects.all()  # Get all books from the databas
@@ -159,6 +154,10 @@ def cartview(request):
     else:
         return redirect('/login/')
 
+def removecart(request, id):
+    get_product = Cart.objects.get(user=request.user, id=id)
+    get_product.delete()
+    return redirect('/cart/')
 
 def booklistview(request):
     return render(request,'books-list.html')
