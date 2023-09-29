@@ -70,14 +70,10 @@ def indexview(request):
 # def indexview(request): 
     google_books_api_key = 'AIzaSyBOgiz9kM8HnX1vtgT8106HgGSOUQ2e7Y4'
     url = f'https://www.googleapis.com/books/v1/volumes?q=Harry+Potter&key={google_books_api_key}&maxResults=10'
-    
     response = requests.get(url)
     data = response.json()
-
     # Extract the list of books from the API response
     books = data.get('items', [])
-
-
     categories = ['comedy', 'adventure', 'thriller']
     random_category = random.choice(categories)  # Select a random category
 
@@ -122,48 +118,91 @@ def loginview(request):
 
 
 
-    google_books_api_key = 'AIzaSyBOgiz9kM8HnX1vtgT8106HgGSOUQ2e7Y4'  # Replace with your Google Books API key
-    url = f'https://www.googleapis.com/books/v1/volumes?q=subject&maxResults=50&key={google_books_api_key}'
-
-    try:
-        response = requests.get(url)
-        data = response.json()
-
-        if 'items' in data:
-            categories = set()
-
-            for item in data['items']:
-                if 'categories' in item['volumeInfo']:
-                    categories.update(item['volumeInfo']['categories'])
-            return render(request, 'categories.html', {'categories': list(categories)})
-        else:
-            return render(request, 'categories.html', {'categories': []})
-    except Exception as e:
-        print(f"Error fetching categories: {str(e)}")
-
-        return render(request, 'books-grid-view.html', {'categories': []})
-
+    
 def shopview(request):
-    book_list = Book.objects.all()  # Get all books from the database
+    book_list = Book.objects.all()  # Get all books from the databas
     paginator = Paginator(book_list, 52)  # Create a Paginator object with 50 books per page
-
     page_number = request.GET.get('page')  # Get the page number from the request
     page_obj = paginator.get_page(page_number)  # Get the Page object for the requested page
-
     context = {
         'page_obj': page_obj,
     }
     return render(request, 'books-grid-view.html', context)
 
+from decimal import Decimal
 
 def cartview(request):
-    return render(request,'shop-cart.html')
+    if request.user.is_authenticated:
+        All_cart = Cart.objects.filter(user=request.user)
+        cart_count = Cart.objects.filter(user=request.user).count()
+        subtotal = Decimal('0')
+        GST_rate = Decimal('0.05')  # 5% GST rate
+        grandtotal = Decimal('0')
+
+        for item in All_cart:
+            # Calculate the GST for each item and add it to the subtotal
+            item.subtotal_with_GST = item.product_total * (Decimal('1') + GST_rate)
+            subtotal += item.subtotal_with_GST
+
+        subtotal=round(subtotal)
+        # Calculate GST amount for the entire cart
+        GST_amount = round(subtotal - (subtotal / (Decimal('1') + GST_rate)))
+
+        # Calculate grand total including GST and shipping
+        grandtotal = round(subtotal +GST_amount)
+
+        context = {
+            'cart_data': All_cart,
+            'count': cart_count,
+            'subtotal': subtotal,
+            'GST': GST_amount,
+            'grandtotal': grandtotal
+        }
+
+        return render(request, 'shop-cart.html', context)
+    else:
+        return redirect('/login/')
+
 
 def booklistview(request):
     return render(request,'books-list.html')
 
+
 def checkoutview(request):
-    return render(request,'shop-checkout.html')
+    cart_count = Cart.objects.filter(user=request.user).count()    
+    if request.method == 'POST':
+        form1 = CustomerAddressForm(request.POST)
+        if form1.is_valid():
+            fname = form1.cleaned_data['fname']
+            lname = form1.cleaned_data['lname']
+            email = form1.cleaned_data['email']
+            mobile = form1.cleaned_data['mobile']
+            add1 = form1.cleaned_data['add1']
+            add2 = form1.cleaned_data['add2']
+            city = form1.cleaned_data['city']
+            state = form1.cleaned_data['state']
+            zipcode = form1.cleaned_data['zipcode']
+
+            # Save the customer data to the database
+            CustomerModel.objects.create(
+                user=request.user,
+                fname=fname,
+                lname=lname,
+                email=email,
+                mobile=mobile,
+                add1=add1,
+                add2=add2,
+                city=city,
+                state=state,
+                zipcode=zipcode
+            )
+            return redirect('/checkout/')
+    else:
+        form1 = CustomerAddressForm()
+    
+    return render(request, 'shop-checkout.html', {'form1': form1, 'count': cart_count})
+
+
 
 def wishlistview(request):
     return render(request,'wishlist.html')
@@ -204,3 +243,5 @@ def view_cart(request):
     context={'cart_items': cart_items, 'total_price': total_price}
     return render(request, 'cart_view.html',context )
 
+def AddressView(request):
+    pass
