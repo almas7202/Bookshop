@@ -59,7 +59,12 @@
 										<td class="product-item-price">₹{{i.book.price}}</td>
 										<td class="product-item-quantity">
 											<div class="quantity btn-quantity style-1 me-3">
-												<input id="demo_vertical2" type="text" value="1" name="demo_vertical2"/>
+												<form method="post" action="{% url 'cartview' %}">
+													{% csrf_token %}
+													<input type="hidden" name="product_id" value="{{ i.book.id }}">
+													<input type="number" name="quantity" value="{{ i.quantity }}" min="1">
+													<button class="btn btn-primary btnhover" type="submit">Update Quantity</button>
+												</form>
 											</div>
 										</td>
 										<td class="product-item-totle">{{i.product_total}}</td>

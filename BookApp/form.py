@@ -29,3 +29,9 @@ class CustomerAddressForm(forms.ModelForm):
                 "state":forms.TextInput(attrs={'class':'form-control required','placeholder':'State'}),
                 "zipcode":forms.TextInput(attrs={'class':'form-control required','placeholder':'* Enter Zipcode'}),
         }
+
+
+class UpdateCartQuantityForm(forms.Form):
+    quantity = forms.IntegerField(min_value=1)
+    product_id = forms.IntegerField(widget=forms.HiddenInput())
+

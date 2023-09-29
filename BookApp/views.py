@@ -6,6 +6,7 @@ from django.core.paginator import Paginator
 
 from .models import *
 
+import json
 import requests
 import random
 
@@ -131,6 +132,17 @@ def cartview(request):
         subtotal = Decimal('0')
         GST_rate = Decimal('0.05')  # 5% GST rate
         grandtotal = Decimal('0')
+        if request.method == 'POST':
+            form = UpdateCartQuantityForm(request.POST)
+            if form.is_valid():
+                # Get the product and updated quantity from the form
+                product_id = form.cleaned_data['product_id']
+                updated_quantity = form.cleaned_data['quantity']
+
+                # Update the cart item with the new quantity
+                cart_item = Cart.objects.get(user=request.user, book_id=product_id)
+                cart_item.quantity = updated_quantity
+                cart_item.save()
 
         for item in All_cart:
             # Calculate the GST for each item and add it to the subtotal
