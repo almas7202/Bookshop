@@ -95,6 +95,7 @@ def indexview(request):
     return render(request,'index.html',context)
 
 
+
 def registerview(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
