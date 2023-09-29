@@ -29,36 +29,27 @@ def generate_random_price():
 def indexview(request): 
     google_books_api_key = 'AIzaSyBOgiz9kM8HnX1vtgT8106HgGSOUQ2e7Y4'
       # Replace with your Google Books API key
-    url = f'https://www.googleapis.com/books/v1/volumes?q=Harry+Potter&key={google_books_api_key}&maxResults=10'
-    
+    url = f'https://www.googleapis.com/books/v1/volumes?q=Harry+Potter&key={google_books_api_key}&maxResults=10'   
     response = requests.get(url)
     data = response.json()
-
     # Extract the list of books from the API response
     books = data.get('items', [])
-
     # Add random prices to the fetched books
     for book in books:
         book['price'] = generate_random_price()
-
     categories = ['comedy', 'adventure', 'thriller']
     random_category = random.choice(categories)  # Select a random category
-
     # Construct the API URL with the selected category
     url1 = f'https://www.googleapis.com/books/v1/volumes?q=subject:{random_category}&key={google_books_api_key}&maxResults=10'
-
     response = requests.get(url1)
     data = response.json()
-
     # Extract the list of books from the API response
     r_books = data.get('items', [])
-
     # Add random prices to the fetched random category books
     for r_book in r_books:
         r_book['price'] = generate_random_price()
 
     context = {'books': books, 'r_books': r_books}
-
     return render(request, 'index.html', context)
 
 
