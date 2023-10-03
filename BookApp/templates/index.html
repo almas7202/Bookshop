@@ -291,22 +291,22 @@
 				<div class="swiper-container swiper-two">
 					<div class="swiper-wrapper">
 
-
-						{% for i in books %}
+					{% if recommended_books %}
+						{% for i in recommended_books %}
 						<div class="swiper-slide">
 							<div class="books-card style-1 wow fadeInUp" data-wow-delay="0.1s">
 								<div class="dz-media">
-									{% if i.volumeInfo.imageLinks %}
-									<img src="{{ i.volumeInfo.imageLinks.thumbnail }}"
-										alt="{{ i.volumeInfo.title }} Cover" class="book-cover">
-									{% else %}
-									<p>No cover image available</p>
-									{% endif %}
+									{% if i.thumbnail != '' %}
+									<img src="{{ i.thumbnail }}" width="500" height="600">
+
+						  {% else %}
+						  <p class="no-image">No cover image available</p>
+						  {% endif %}
 								</div>
 								<div class="dz-content">
 									<h4 class="title">
 										<!-- Apply CSS to limit the title width -->
-										<span class="title-text">{{ i.volumeInfo.title|slice:":25" }}</span>
+										<span class="title-text">{{ i.title }}</span>
 									</h4>
 									<span class="price">₹{{i.price}}</span>
 									<!-- Adjust the button placement and styling -->
@@ -319,7 +319,8 @@
 							</div>
 						</div>
 						{% endfor %}
-
+					
+					{% endif %}
 					</div>
 				</div>
 			</div>

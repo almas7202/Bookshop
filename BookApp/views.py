@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q
 from .models import *
-
+from .recommendations import get_recommendations
 import json
 import requests
 import random
@@ -26,17 +26,26 @@ def generate_random_price():
     return round(random.uniform(350, 850))  # Generates a random price with two decimal places
 
 def search_books(request):
-    query = request.GET.get('q', '')  # Get the search query from the GET request, default to empty string
+    query = request.GET.get('q', '')  # Get the search query from the GET request, default to an empty string
 
     # Perform a case-insensitive search across multiple fields
     books = Book.objects.filter(
         Q(title__icontains=query) |
         Q(authors__icontains=query) |
         Q(description__icontains=query)
-    )[:20] 
-    books=set(books)
-    print(books)
-    return render(request, 'index.html', {'query': query, 'books': books})
+    )
+
+    # Apply order_by to the queryset before slicing
+    books = books.order_by('title')[:20]
+
+    recommended_books = []  # Initialize an empty list for recommendations
+
+    if query:
+        # If a query is provided, get recommendations for the first book in the search results
+        if books:
+            recommended_books = get_recommendations(books.first().title, num_recommendations=15)
+
+    return render(request, 'index.html', {'query': query, 'books': books, 'recommended_books': recommended_books})
 
 
 def indexview(request): 

@@ -16,9 +16,9 @@ class Book(models.Model):
     previewLink = models.CharField(max_length=255)
     infoLink = models.CharField(max_length=255)
     Genre = models.CharField(max_length=255)
-    averageRating = models.FloatField()
-    ratingsCount = models.IntegerField()
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    averageRating = models.FloatField(null=True, blank=True)  # Allow null values
+    ratingsCount = models.IntegerField(null=True, blank=True)  # Allow null values
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)  # Provide a default value
 
     @property
     def thumbnail(self):
