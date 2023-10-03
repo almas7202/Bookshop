@@ -3,7 +3,7 @@ from .form import *
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.core.paginator import Paginator
-
+from django.db.models import Q
 from .models import *
 
 import json
@@ -24,6 +24,20 @@ def baseview(request):
     
 def generate_random_price():
     return round(random.uniform(350, 850))  # Generates a random price with two decimal places
+
+def search_books(request):
+    query = request.GET.get('q', '')  # Get the search query from the GET request, default to empty string
+
+    # Perform a case-insensitive search across multiple fields
+    books = Book.objects.filter(
+        Q(title__icontains=query) |
+        Q(authors__icontains=query) |
+        Q(description__icontains=query)
+    )[:20] 
+    books=set(books)
+    print(books)
+    return render(request, 'index.html', {'query': query, 'books': books})
+
 
 def indexview(request): 
     google_books_api_key = 'AIzaSyBOgiz9kM8HnX1vtgT8106HgGSOUQ2e7Y4'
@@ -98,6 +112,13 @@ def loginview(request):
         else:
             messages.error(request, 'Invalid credentials. Please try again.')
     return render(request, 'login.html')
+
+
+def logoutview(request):
+    if request.user.is_authenticated:
+        logout(request)
+        messages.info(request, 'You are Successfully Logged Out !')
+    return redirect('/login/')
     
 def shopview(request):
     book_list = Book.objects.all()  # Get all books from the databas
@@ -158,6 +179,8 @@ def removecart(request, id):
     get_product = Cart.objects.get(user=request.user, id=id)
     get_product.delete()
     return redirect('/cart/')
+
+
 
 def booklistview(request):
     return render(request,'books-list.html')

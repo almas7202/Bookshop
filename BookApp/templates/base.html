@@ -208,26 +208,11 @@
 				
 				<!-- header search nav -->
 				<div class="header-search-nav">
-					<form class="header-item-search">
+					<form action="{% url 'search_books' %}" method="get" class="header-item-search">
 						<div class="input-group search-input">
-							<select class="default-select">
-								<option>Category</option>
-								<option>Photography </option>
-								<option>Arts</option>
-								<option>Adventure</option>
-								<option>Action</option>
-								<option>Games</option>
-								<option>Movies</option>
-								<option>Comics</option>
-								<option>Biographies</option>
-								<option>Children’s Books</option>
-								<option>Historical</option>
-								<option>Contemporary</option>
-								<option>Classics</option>
-								<option>Education</option>
-							</select>
-							<input type="text" class="form-control" aria-label="Text input with dropdown button" placeholder="Search Books Here">
-							<button class="btn" type="button"><i class="flaticon-loupe"></i></button>
+							
+							<input type="text" id="search_query" name="q" class="form-control" aria-label="Text input with dropdown button" placeholder="Search Books Here">
+							<button class="btn" type="submit"><i class="flaticon-loupe"></i></button>
 						</div>
 					</form>
 				</div>
@@ -263,17 +248,12 @@
 						<div class="logo-header logo-dark">
 							<a href="index.html"><img src="{% static 'images/logo.png' %}" alt=""></a>
 						</div>
-						<form class="search-input">
-							<div class="input-group">
-								<input type="text" class="form-control" aria-label="Text input with dropdown button" placeholder="Search Books Here">
-								<button class="btn" type="button"><i class="flaticon-loupe"></i></button>
-							</div>
-						</form>
+						
 						<ul class="nav navbar-nav">
 							<li class="sub-menu-down"><a href="javascript:void(0);"><span>Home</span></a>
 								<ul class="sub-menu">
 									<li><a href="/">Home 1</a></li>
-									<li><a href="index-2.html">Home 2</a></li>
+									<!-- <li><a href="index-2.html">Home 2</a></li> -->
 								</ul>
 							</li>
 							<li><a href="about-us.html"><span>About Us</span></a></li>
@@ -300,7 +280,13 @@
 									<li><a href="/cart/">Cart</a></li>
 									<li><a href="/checkout/">Checkout</a></li>
 									<li><a href="wishlist.html">Wishlist</a></li>
+									
+									{% if user.is_authenticated %}
+									<li><a href="/logout/">Logout</a></li>
+									{%else%}
 									<li><a href="/login/">Login</a></li>
+									{% endif %}
+										
 									<li><a href="/register/">Registration</a></li>
 								</ul>
 							</li>

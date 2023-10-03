@@ -35,3 +35,7 @@ class UpdateCartQuantityForm(forms.Form):
     quantity = forms.IntegerField(min_value=1)
     product_id = forms.IntegerField(widget=forms.HiddenInput())
 
+
+class BookSearchForm(forms.Form):
+    query = forms.CharField(label='Search for books', max_length=255, required=False)
+
