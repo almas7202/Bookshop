@@ -10,6 +10,7 @@ import json
 import requests
 import random
 
+from django.db import IntegrityError
 
 # GOOGLE_BOOKS_API_KEY = 'AIzaSyDqa0wRKCEGjuh9PqBAlqWNvNvxpN-4YNI'
 import random
@@ -122,7 +123,6 @@ def loginview(request):
             messages.error(request, 'Invalid credentials. Please try again.')
     return render(request, 'login.html')
 
-
 def logoutview(request):
     if request.user.is_authenticated:
         logout(request)
@@ -195,41 +195,44 @@ def booklistview(request):
     return render(request,'books-list.html')
 
 
-def checkoutview(request):
-    cart_count = Cart.objects.filter(user=request.user).count()    
+def checkoutview(request):    
+    cust_address = CustomerModel.objects.filter(user=request.user)
+    All_cart = Cart.objects.filter(user=request.user)
+    subtotal = Decimal('0')
+    GST_rate = Decimal('0.05')  # 5% GST rate
+    grandtotal = Decimal('0')
+    for item in All_cart:
+        # Calculate the GST for each item and add it to the subtotal
+        item.subtotal_with_GST = item.product_total * (Decimal('1') + GST_rate)
+        subtotal += item.subtotal_with_GST
+    subtotal=round(subtotal)
+    # Calculate GST amount for the entire cart
+    GST_amount = round(subtotal - (subtotal / (Decimal('1') + GST_rate)))
+
+    # Calculate grand total including GST and shipping
+    grandtotal = round(subtotal +GST_amount)
     if request.method == 'POST':
         form1 = CustomerAddressForm(request.POST)
         if form1.is_valid():
-            fname = form1.cleaned_data['fname']
-            lname = form1.cleaned_data['lname']
-            email = form1.cleaned_data['email']
-            mobile = form1.cleaned_data['mobile']
-            add1 = form1.cleaned_data['add1']
-            add2 = form1.cleaned_data['add2']
-            city = form1.cleaned_data['city']
-            state = form1.cleaned_data['state']
-            zipcode = form1.cleaned_data['zipcode']
-
-            # Save the customer data to the database
-            CustomerModel.objects.create(
-                user=request.user,
-                fname=fname,
-                lname=lname,
-                email=email,
-                mobile=mobile,
-                add1=add1,
-                add2=add2,
-                city=city,
-                state=state,
-                zipcode=zipcode
-            )
-            return redirect('/checkout/')
+            try:
+                print(request.user)
+                customer = form1.save(commit=False)
+                customer.user = request.user
+                customer.save()
+                return redirect('/checkout/')
+            except IntegrityError as e:
+                print(f"Error saving data: {e}")
+                messages.error(request, 'There was an error while saving the data.')
+        else:
+            errors = form1.errors.as_data()
+            for field, field_errors in errors.items():
+                for error in field_errors:
+                    messages.error(request, f"{field}: {error}")
     else:
         form1 = CustomerAddressForm()
+    context={'form1': form1,'cust_address':cust_address,'All_cart':All_cart,'subtotal': subtotal,'GST': GST_amount,'grandtotal': grandtotal}    
+    return render(request, 'shop-checkout.html',context)
     
-    return render(request, 'shop-checkout.html', {'form1': form1, 'count': cart_count})
-
-
 
 def wishlistview(request):
     return render(request,'wishlist.html')
