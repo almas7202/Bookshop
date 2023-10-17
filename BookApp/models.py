@@ -35,25 +35,3 @@ class Cart(models.Model):
         return ((self.book.price)*(self.quantity))
     
     
-<<<<<<< HEAD
-
-=======
-class CustomerModel(models.Model):
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
-    fname = models.CharField(max_length=200)
-    lname = models.CharField(max_length=200)
-    email = models.EmailField()
-    mobile = models.IntegerField()
-    add1 = models.CharField(max_length=300)
-    add2 = models.CharField(max_length=300)
-    city = models.CharField(max_length=200)
-    state = models.CharField(max_length=200)
-    country = models.CharField(max_length=200,default='India')
-    zipcode = models.IntegerField() 
-    
-
-    objects = models.Manager()
-
-    def __str__(self):
-        return (self.fname +','+ self.add1 +','+ self.add2)
->>>>>>> aamir
