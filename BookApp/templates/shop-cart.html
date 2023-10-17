@@ -51,78 +51,34 @@
 									</tr>
 								</thead>
 								<tbody>
+								
+								{% for i in cart_data %}
 									<tr>
-										<td class="product-item-img"><img src="{% static 'images/books/grid/book3.jpg' %}" alt=""></td>
-										<td class="product-item-name">Battle Drive</td>
-										<td class="product-item-price">$28.00</td>
-										<td class="product-item-quantity">
-											<div class="quantity btn-quantity style-1 me-3">
-												<input id="demo_vertical2" type="text" value="1" name="demo_vertical2"/>
-											</div>
+										<td class="product-item-img">
+											{% if i.Book.thumbnail != '' %}
+									          <img src="{{ i.book.thumbnail}}">
+									{% else %}
+									<p class="no-image">No cover image available</p>
+									{% endif %}
 										</td>
-										<td class="product-item-totle">$28.00</td>
-										<td class="product-item-close"><a href="javascript:void(0);" class="ti-close"></a></td>
-									</tr>
-									<tr>
-										<td class="product-item-img"><img src="{% static 'images/books/grid/book2.jpg' %}" alt=""></td>
-										<td class="product-item-name">Home</td>
-										<td class="product-item-price">$28.00</td>
+										<td class="product-item-name">{{i.book.title}}</td>
+										<td class="product-item-price">₹{{i.book.price}}</td>
 										<td class="product-item-quantity">
-											<div class="quantity btn-quantity style-1 me-3">
-												<input id="demo_vertical3" type="text" value="1" name="demo_vertical2"/>
+											<div class="quantity btn-quantity style-1 me-2">
+												<form method="post" action="{% url 'cartview' %}">
+													{% csrf_token %}
+													<input type="hidden" name="product_id" value="{{ i.book.id }}">
+													<input type="number" name="quantity" value="{{ i.quantity }}" size="20" min="1" max="5">
+													<button class="btn btn-primary btnhover btn-sm" type="submit" style="margin-bottom:6px">Update Quantity</button>
+												</form>
 											</div>
+											
 										</td>
-										<td class="product-item-totle">$28.00</td>
-										<td class="product-item-close"><a href="javascript:void(0);" class="ti-close"></a></td>
+										<td class="product-item-totle">{{i.product_total}}</td>
+										<!-- <td class="product-item-close"><a href="javascript:void(0);" class="ti-close"></a></td> -->
+										<td class="product-item-close"><a href="{% url 'rem_cart' i.id %}"><i class="fa fa-times"></i></a></td>
 									</tr>
-									<tr>
-										<td class="product-item-img"><img src="{% static 'images/books/grid/book4.jpg' %}" alt=""></td>
-										<td class="product-item-name">Such A Fun Age</td>
-										<td class="product-item-price">$28.00</td>
-										<td class="product-item-quantity">
-											<div class="quantity btn-quantity style-1 me-3">
-												<input id="demo_vertical4" type="text" value="1" name="demo_vertical2"/>
-											</div>
-										</td>
-										<td class="product-item-totle">$28.00</td>
-										<td class="product-item-close"><a href="javascript:void(0);" class="ti-close"></a></td>
-									</tr>
-									<tr>
-										<td class="product-item-img"><img src="{% static 'images/books/grid/book1.jpg' %}" alt=""></td>
-										<td class="product-item-name">Real Life</td>
-										<td class="product-item-price">$28.00</td>
-										<td class="product-item-quantity">
-											<div class="quantity btn-quantity style-1 me-3">
-												<input id="demo_vertical5" type="text" value="1" name="demo_vertical2"/>
-											</div>
-										</td>
-										<td class="product-item-totle">$28.00</td>
-										<td class="product-item-close"><a href="javascript:void(0);" class="ti-close"></a></td>
-									</tr>
-									<tr>
-										<td class="product-item-img"><img src="{% static 'images/books/grid/book6.jpg' %}" alt=""></td>
-										<td class="product-item-name">Cat Adventure</td>
-										<td class="product-item-price">$28.00</td>
-										<td class="product-item-quantity">
-											<div class="quantity btn-quantity style-1 me-3">
-												<input id="demo_vertical6" type="text" value="1" name="demo_vertical2"/>
-											</div>
-										</td>
-										<td class="product-item-totle">$28.00</td>
-										<td class="product-item-close"><a href="javascript:void(0);" class="ti-close"></a></td>
-									</tr>
-									<tr>
-										<td class="product-item-img"><img src="{% static 'images/books/grid/book5.jpg' %}" alt=""></td>
-										<td class="product-item-name">Take Out Tango</td>
-										<td class="product-item-price">$28.00</td>
-										<td class="product-item-quantity">
-											<div class="quantity btn-quantity style-1 me-3">
-												<input id="demo_vertical7" type="text" value="1" name="demo_vertical2"/>
-											</div>
-										</td>
-										<td class="product-item-totle">$28.00</td>
-										<td class="product-item-close"><a href="javascript:void(0);" class="ti-close"></a></td>
-									</tr>
+									{% endfor %}	
 								</tbody>
 							</table>
 						</div>
@@ -131,33 +87,7 @@
 				</div>
 				<div class="row">
 					<div class="col-lg-6">
-						<div class="widget">
-							<form class="shop-form"> 
-								<h4 class="widget-title">Calculate Shipping</h4>
-								<div class="form-group">
-									<select class="default-select">
-										  <option selected>Credit Card Type</option>
-										  <option value="1">Another option</option>
-										  <option value="2">A option</option>
-										  <option value="3">Potato</option>
-									</select>	
-								</div>	
-								<div class="row">
-									<div class="form-group col-lg-6">
-										<input type="text" class="form-control" placeholder="Credit Card Number">
-									</div>
-									<div class="form-group col-lg-6">
-										<input type="text" class="form-control" placeholder="Card Verification Number">
-									</div>
-								</div>
-								<div class="form-group">
-									<input type="text" class="form-control" placeholder="Coupon Code">
-								</div>
-								<div class="form-group">
-									<a href="shop-cart.html" class="btn btn-primary btnhover" type="button">Apply Coupon</a>
-								</div>
-							</form>	
-						</div>
+						
 					</div>
 					<div class="col-lg-6">
 						<div class="widget">
@@ -166,24 +96,21 @@
 								<tbody>
 									<tr>
 										<td>Order Subtotal</td>
-										<td>$125.96</td>
+										<td>{{subtotal}}</td>
 									</tr>
 									<tr>
-										<td>Shipping</td>
-										<td>Free Shipping</td>
+										<td>GST</td>
+										<td>{{GST}}</td>
 									</tr>
-									<tr>
-										<td>Coupon</td>
-										<td>$28.00</td>
-									</tr>
+									
 									<tr>
 										<td>Total</td>
-										<td>$506.00</td>
+										<td>{{grandtotal}}</td>
 									</tr>
 								</tbody>
 							</table>
 							<div class="form-group m-b25">
-								<a href="shop-checkout.html" class="btn btn-primary btnhover" type="button">Proceed to Checkout</a>
+								<a href="/checkout/" class="btn btn-primary btnhover" type="button">Proceed to Checkout</a>
 							</div>
 						</div>
 					</div>

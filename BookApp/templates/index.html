@@ -1,14 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-
-
-
-
-
 {% block body %}
-
-
 
 <body>
 
@@ -23,8 +16,6 @@
 			<div class="preloader-wrap wrap5"></div>
 		</div> 
 	</div> -->
-
-
 
 	<div class="page-content bg-white">
 
@@ -291,22 +282,22 @@
 				<div class="swiper-container swiper-two">
 					<div class="swiper-wrapper">
 
-
-						{% for i in books %}
+					{% if recommended_books %}
+						{% for i in recommended_books %}
 						<div class="swiper-slide">
 							<div class="books-card style-1 wow fadeInUp" data-wow-delay="0.1s">
 								<div class="dz-media">
-									{% if i.volumeInfo.imageLinks %}
-									<img src="{{ i.volumeInfo.imageLinks.thumbnail }}"
-										alt="{{ i.volumeInfo.title }} Cover" class="book-cover">
-									{% else %}
-									<p>No cover image available</p>
-									{% endif %}
+									{% if i.thumbnail != '' %}
+									<img src="{{ i.thumbnail }}" width="500" height="600">
+
+						  {% else %}
+						  <p class="no-image">No cover image available</p>
+						  {% endif %}
 								</div>
 								<div class="dz-content">
 									<h4 class="title">
 										<!-- Apply CSS to limit the title width -->
-										<span class="title-text">{{ i.volumeInfo.title|slice:":25" }}</span>
+										<span class="title-text">{{ i.title }}</span>
 									</h4>
 									<span class="price">₹{{i.price}}</span>
 									<!-- Adjust the button placement and styling -->
@@ -319,7 +310,8 @@
 							</div>
 						</div>
 						{% endfor %}
-
+					
+					{% endif %}
 					</div>
 				</div>
 			</div>
@@ -378,7 +370,7 @@
 		</section>
 		<!-- icon-box1 End-->
 
-		<!-- Book Sale -->
+		<!-- Search Product -->
 		<section class="content-inner-1">
 			<div class="container">
 				<div class="section-head book-align">
@@ -392,24 +384,25 @@
 				<div class="swiper-container books-wrapper-3 swiper-four">
 					<div class="swiper-wrapper">
 
-						{% for j in r_books %}
-
-
-
+						
+						
+						
+						{% for book in books %}
 						<div class="swiper-slide">
 							<div class="books-card style-3 wow fadeInUp" data-wow-delay="0.1s">
 								<div class="dz-media">
-									{% if j.volumeInfo.imageLinks %}
-									<img src="{{ j.volumeInfo.imageLinks.thumbnail }}"
-										alt="{{ .volumeInfo.title }} Cover" class="book-cover">
+									{% if book.thumbnail != '' %}
+									          <img src="{{ book.thumbnail }}" width="500" height="600">
+
 									{% else %}
-									<p>No cover image available</p>
+									<p class="no-image">No cover image available</p>
 									{% endif %}
+
 								</div>
 								<div class="dz-content">
-									<h5 class="title"><a href="books-grid-view.html">{{ j.volumeInfo.title|slice:":25" }}</a></h5>
+									<h5 class="title"><a href="books-grid-view.html">{{ book.title }}</a></h5>
 									<ul class="dz-tags">
-										<li><a href="books-grid-view.html">{{j.volumeInfo.Category}}</a></li>
+										<li><a href="books-grid-view.html">{{book.category}}</a></li>
 										<!-- <li><a href="books-grid-view.html">DRAMA</a></li> -->
 									</ul>
 									<div class="book-footer">
@@ -417,8 +410,8 @@
 											<i class="flaticon-star"></i> 6.5
 										</div>
 										<div class="price">
-											<span class="price-num">₹{{j.price}}</span>
-											<del>$12.0</del>
+											<span class="price-num">₹{{book.price}}</span>
+											<!-- <del>$12.0</del> -->
 										</div>
 
 										

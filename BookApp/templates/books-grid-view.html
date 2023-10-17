@@ -116,16 +116,16 @@
 					</div>
 
 					<div class="row book-grid-row">
-
-
+						
+						
+						
 						{% for book in page_obj %}
-
 						<div class="col-book style-1">
 							<div class="dz-shop-card style-1">
 								<div class="dz-media">
-									{% if book.thumbnail_link %}
-									<img src="{{ book.thumbnail_link }}" alt="{{ book.title }} Cover" width="500"
-										height="600">
+									{% if book.thumbnail != '' %}
+									          <img src="{{ book.thumbnail }}" width="500" height="600">
+
 									{% else %}
 									<p class="no-image">No cover image available</p>
 									{% endif %}
@@ -154,6 +154,16 @@
 											<span class="price-num">₹{{ book.price }}</span>
 											<!-- <del>$70.00</del> -->
 										</div>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+										{% if isbn.id %}
+    <a href="{% url 'add_to_cart' isbn.id %}" class="btn btn-secondary box-btn btnhover btnhover2">
+        <i class="flaticon-shopping-cart-1 m-r10"></i> Add to Cart
+    </a>
+{% endif %}v
+=======
+>>>>>>> aamir
 
 
 										
@@ -163,13 +173,17 @@
 											class="btn btn-secondary box-btn btnhover btnhover2">
 											<i class="flaticon-shopping-cart-1 m-r10"></i> Add to Cart
 										</a>
+<<<<<<< HEAD
+=======
+>>>>>>> 7f2a6d49df8ed3fdea6f3f7bc2df65b1c2593c39
+>>>>>>> aamir
 									</div>
 								</div>
 							</div>
 						</div>
-
+						
+						
 						{% endfor %}
-
 					</div>
 					<div class="row page mt-0">
 						<div class="col-md-6">
