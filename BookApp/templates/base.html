@@ -168,13 +168,13 @@
 								<a class="nav-link" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 									<img src="{% static 'images/profile1.jpg' %}" alt="/">
 									<div class="profile-info">
-										<h6 class="title">Brian</h6>
-										<span>info@gmail.com</span>
+										<h6 class="title">{{request.user}}</h6>
+								
 									</div>
 								</a>
 								<div class="dropdown-menu py-0 dropdown-menu-end">
 									<div class="dropdown-header">
-										<h6 class="m-0">Brian</h6>
+										<h6 class="m-0">{{request.user}}</h6>
 										<span>info@gmail.com</span>
 									</div>
 									<div class="dropdown-body">
@@ -198,7 +198,7 @@
 										</a>
 									</div>
 									<div class="dropdown-footer">
-										<a class="btn btn-primary w-100 btnhover btn-sm" href="shop-login.html">Log Out</a>
+										<a class="btn btn-primary w-100 btnhover btn-sm" href="/logout/">Log Out</a>
 									</div>
 								</div>
 							</li>
@@ -273,7 +273,7 @@
 							<li class="sub-menu-down"><a href="javascript:void(0);"><span>Shop</span></a>
 								<ul class="sub-menu">
 									<li><a href="/shop/">Shop Grid</a></li>
-									<li><a href="books-grid-view-sidebar.html">Shop Grid Sidebar</a></li>
+									<li><a href="/booklist/">Shop Grid Sidebar</a></li>
 									<li><a href="books-list.html">Shop List</a></li>
 									<li><a href="books-list-view-sidebar.html">Shop List Sidebar</a></li>
 									<li><a href="books-detail.html">Shop Detail</a></li>
@@ -285,9 +285,9 @@
 									<li><a href="/logout/">Logout</a></li>
 									{%else%}
 									<li><a href="/login/">Login</a></li>
+									<li><a href="/register/">Registration</a></li>
 									{% endif %}
 										
-									<li><a href="/register/">Registration</a></li>
 								</ul>
 							</li>
 							<li class="sub-menu-down"><a href="javascript:void(0);"><span>Blog</span></a>

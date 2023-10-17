@@ -53,3 +53,12 @@ class CustomerModel(models.Model):
 
     def __str__(self):
         return (self.fname +','+ self.add1 +','+ self.add2)
+
+step = (('Pending','Pending'),('Accepted','Accepted'),('Packing','Packing'),('Shipping','Shipping'),('Deliverd','Deliverd'))
+class Order(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    customer = models.ForeignKey(CustomerModel,on_delete=models.CASCADE)
+    Book = models.ForeignKey(Book,on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()
+    order_date = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(choices=step,max_length=200,default='Pending')    

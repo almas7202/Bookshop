@@ -14,3 +14,6 @@ admin.site.register(Cart)
 class CustomerModelAdmin(admin.ModelAdmin):
     list_display = [ "zipcode", "state", "city", "country", "add2", "add1", "mobile", "email", "lname", "fname", "user"][::-1]
 
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ["status", "order_date", "quantity", "Book", "customer", "user"]

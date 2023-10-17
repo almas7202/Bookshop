@@ -13,12 +13,13 @@
 				<div class="preloader-wrap wrap3"></div>
 				<div class="preloader-wrap wrap4"></div>
 				<div class="preloader-wrap wrap5"></div>
-			</div> 
+			</div>
 		</div>
-		 {% endcomment %}
+		{% endcomment %}
 		<div class="page-content">
 			<!-- inner page banner -->
-			<div class="dz-bnr-inr overlay-secondary-dark dz-bnr-inr-sm" style="background-image:url(images/background/bg3.jpg);">
+			<div class="dz-bnr-inr overlay-secondary-dark dz-bnr-inr-sm"
+				style="background-image:url(images/background/bg3.jpg);">
 				<div class="container">
 					<div class="dz-bnr-inr-entry">
 						<h1>Checkout</h1>
@@ -32,7 +33,7 @@
 				</div>
 			</div>
 			<!-- inner page banner End-->
-			
+
 			<!-- contact area -->
 			<section class="content-inner-1">
 				<!-- Product -->
@@ -42,67 +43,70 @@
 							<div class="col-lg-6 col-md-6">
 								<div class="widget">
 									<h4 class="widget-title">Billing & Shipping Address</h4>
-									
+
 									<form method="POST" novalidate>
-									{% csrf_token %}
-									<div class="row">
-										<div class="form-group col-md-6">
-											{{form1.fname}}
-										</div>
-										<div class="form-group col-md-6">
-											<!-- <input type="text" class="form-control" placeholder="Last Name">
+										{% csrf_token %}
+										<div class="row">
+											<div class="form-group col-md-6">
+												{{form1.fname}}
+											</div>
+											<div class="form-group col-md-6">
+												<!-- <input type="text" class="form-control" placeholder="Last Name">
 											 -->
-											 {{form1.lname}}
+												{{form1.lname}}
+											</div>
 										</div>
-									</div>
-									<div class="row">
-										<div class="form-group col-md-6">
-											<!-- <input type="email" class="form-control" placeholder="Email"> -->
-											{{form1.email}}
+										<div class="row">
+											<div class="form-group col-md-6">
+												<!-- <input type="email" class="form-control" placeholder="Email"> -->
+												{{form1.email}}
+											</div>
+											<div class="form-group col-md-6">
+												<!-- <input type="text" class="form-control" placeholder="Phone"> -->
+												{{form1.mobile}}
+											</div>
 										</div>
-										<div class="form-group col-md-6">
-											<!-- <input type="text" class="form-control" placeholder="Phone"> -->
-											{{form1.mobile}}
+
+										<div class="form-group">
+											<!-- <input type="text" class="form-control" placeholder="Address"> -->
+											{{form1.add1}}
 										</div>
-									</div>
-									
-									<div class="form-group">
-										<!-- <input type="text" class="form-control" placeholder="Address"> -->
-										{{form1.add1}}
-									</div>
-									<div class="row">
-										<div class="form-group col-md-6">
-											<!-- <input type="text" class="form-control" placeholder="Apartment, suite, unit etc."> -->
-											{{form1.add2}}
+										<div class="row">
+											<div class="form-group col-md-6">
+												<!-- <input type="text" class="form-control" placeholder="Apartment, suite, unit etc."> -->
+												{{form1.add2}}
+											</div>
+											<div class="form-group col-md-6">
+												<!-- <input type="text" class="form-control" placeholder="Town / City"> -->
+												{{form1.city}}
+											</div>
 										</div>
-										<div class="form-group col-md-6">
-											<!-- <input type="text" class="form-control" placeholder="Town / City"> -->
-											{{form1.city}}
+										<div class="row">
+											<div class="form-group col-md-6">
+												<!-- <input type="text" class="form-control" placeholder="State / County"> -->
+												{{form1.state}}
+											</div>
+											<div class="form-group col-md-6">
+												<!-- <input type="text" class="form-control" placeholder="Postcode / Zip"> -->
+												{{form1.zipcode}}
+											</div>
 										</div>
-									</div>
-									<div class="row">
-										<div class="form-group col-md-6">
-											<!-- <input type="text" class="form-control" placeholder="State / County"> -->
-											{{form1.state}}
-										</div>
-										<div class="form-group col-md-6">
-											<!-- <input type="text" class="form-control" placeholder="Postcode / Zip"> -->
-											{{form1.zipcode}}
-										</div>
-									</div>
-									
-									<button class="btn btn-primary btnhover mb-3" type="submit"> Save <i class="fa fa-arrow-circle-o-down"></i></button>
-								</form>	
+
+										<button class="btn btn-primary btnhover mb-3" type="submit"> Save <i
+												class="fa fa-arrow-circle-o-down"></i></button>
+									</form>
 								</div>
 							</div>
 							<div class="col-lg-6 col-md-6">
-								<button class="btn btn-primary btnhover mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#different-address">Ship to a different address <i class="fa fa-arrow-circle-o-down"></i></button>
+								<button class="btn btn-primary btnhover mb-3" type="button" data-bs-toggle="collapse"
+									data-bs-target="#different-address">Ship to a different address <i
+										class="fa fa-arrow-circle-o-down"></i></button>
 								<div id="different-address" class="collapse">
 									<p>Select Address for Shipping & Billing </p>
-									
+
 									<div class="form-group">
-										
-										{% for add in cust_address  %}
+
+										<!-- {% for add in cust_address  %}
 											
 										
 											
@@ -131,18 +135,53 @@
 											</div>
 										</div>
 
-										{% endfor %}
+										{% endfor %} -->
+
+										<form method="post" action="{% url 'checkoutview' %}">
+											{% csrf_token %}
+											{% for add in cust_address %}
+											<div class="your-order-table table-responsive border">
+												<div class="container">
+													<div class="row">
+														<div class="col-xl-12">
+															<div class="breadcrumb-wrapper" style="padding: 20px;">
+																<div class="row">
+																	<div class="col-1">
+																		<input required class="addradio" type="radio"
+																			name="selected_address"
+																			value="{{ add.id }}">
+																	</div>
+																	<div class="col-10">
+																		<h4><strong>{{ add.fname }}, {{ add.lname}}</strong></h4>
+																	</div>
+																</div>
+																{{ add.add1 }}<br>
+																{{ add.add2 }}<br>
+																{{ add.email }}, {{ add.mobile }}<br>
+																{{ add.ccadd }}, {{ add.country }}<br>
+																{{ add.city }}, {{ add.zipcode }}<br>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											{% endfor %}
+											<!-- <input type="submit" class="btn btn-primary btnhover mb-3 mt-3" value="Submit Address"> -->
+											<!-- </form> -->
+
+
 									</div>
-							
-							
-									<p>Create an account by entering the information below. If you are a returning customer please login at the top of the page.</p>
+
+
+									<!-- <p>Create an account by entering the information below. If you are a returning customer please login at the top of the page.</p> -->
 								</div>
-							
-							
+
+
 							</div>
 						</div>
 					</div>
-					<div class="dz-divider bg-gray-dark text-gray-dark icon-center  my-5"><i class="fa fa-circle bg-white text-gray-dark"></i></div>
+					<div class="dz-divider bg-gray-dark text-gray-dark icon-center  my-5"><i
+							class="fa fa-circle bg-white text-gray-dark"></i></div>
 					<div class="row">
 						<div class="col-lg-6">
 							<div class="widget">
@@ -156,23 +195,23 @@
 										</tr>
 									</thead>
 									<tbody>
-										
-										{% for i in All_cart  %}
-											
-										
+
+										{% for i in All_cart %}
+
+
 										<tr>
 											<td class="product-item-img">
 												{% if i.Book.thumbnail != '' %}
-									          <img src="{{ i.book.thumbnail}}">
-											{% else %}
+												<img src="{{ i.book.thumbnail}}">
+												{% else %}
 												<p class="no-image">No cover image available</p>
-											{% endif %}
+												{% endif %}
 											</td>
 											<td class="product-item-name">{{i.book.title}}</td>
 											<td class="product-price">{{i.book.price}}</td>
 										</tr>
 										{% endfor %}
-								
+
 									</tbody>
 								</table>
 							</div>
@@ -200,26 +239,19 @@
 										</tr>
 									</tbody>
 								</table>
-								<h4 class="widget-title">Payment Method</h4>
+
 								<div class="form-group">
-									<input type="text" class="form-control" placeholder="Name on Card">
-								</div>
-								<div class="form-group">
-									<select class="default-select">
-										<option value="">Credit Card Type</option>
-										<option value="">Another option</option>
-										<option value="">A option</option>
-										<option value="">Potato</option>
-									</select>	
-								</div>
-								<div class="form-group">
-									<input type="text" class="form-control" placeholder="Credit Card Number">
-								</div>
-								<div class="form-group">
-									<input type="text" class="form-control" placeholder="Card Verification Number">
-								</div>
-								<div class="form-group">
-									<button class="btn btn-primary btnhover" type="button">Place Order Now </button>
+									<script src="https://checkout.razorpay.com/v1/checkout.js"
+										data-key="rzp_test_7iEeq4gBX0tDwL" data-amount="{{amount}}" data-currency="INR"
+										data-order_id="{{payment.id}}" data-buttontext="Pay with Razorpay"
+										data-name="BookApp" data-description="Book Recommendation System"
+										data-image="{% static 'assets/img/logo/logo.png' %}" data-prefill.name="PC"
+										data-prefill.email="mediequip@mail.com" data-theme.color="#4e97fd">
+										</script>
+
+
+									<button class="btn btn-primary btnhover" type="submit">Place Order Now </button>
+									
 								</div>
 							</form>
 						</div>
@@ -227,16 +259,17 @@
 				</div>
 				<!-- Product END -->
 			</section>
-			<!-- contact area End--> 
+			<!-- contact area End-->
 		</div>
-		
+
 		<button class="scroltop" type="button"><i class="fas fa-arrow-up"></i></button>
 	</div>
-	
 
 
-{% endblock body %}
+
+	{% endblock body %}
 </body>
 
 <!-- Mirrored from bookland.dexignzone.com/xhtml/shop-checkout.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 12 Aug 2023 16:57:20 GMT -->
+
 </html>
