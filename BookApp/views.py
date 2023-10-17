@@ -191,9 +191,8 @@ def wishlistview(request):
     return render(request,'wishlist.html')
 
 def profileview(request):
-<<<<<<< HEAD
+
     return render(request,'my-profile.html')
-=======
     return render(request,'my-profile.html')
     
 
@@ -224,4 +223,3 @@ def view_cart(request):
     context={'cart_items': cart_items, 'total_price': total_price}
     return render(request, 'cart_view.html',context )
 
->>>>>>> bef1bfb1a0aa583f1512823bde62a7826a92778a
