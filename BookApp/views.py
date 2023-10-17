@@ -50,6 +50,7 @@ def search_books(request):
 
 
 def indexview(request): 
+    print(request.user)
     google_books_api_key = 'AIzaSyBOgiz9kM8HnX1vtgT8106HgGSOUQ2e7Y4'
       # Replace with your Google Books API key
     url = f'https://www.googleapis.com/books/v1/volumes?q=Harry+Potter&key={google_books_api_key}&maxResults=10'   
@@ -109,7 +110,6 @@ def registerview(request):
     else:
         form = RegistrationForm()   
     return render(request,'registration.html',{'form':form})
-
 
 def loginview(request):
     if request.method == 'POST': 
