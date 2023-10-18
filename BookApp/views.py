@@ -194,24 +194,33 @@ def checkoutview(request):
     GST_rate = Decimal('0.05')  # 5% GST rate
     grandtotal = Decimal('0')
 
-    for item in All_cart:
-        # Calculate the GST for each item and add it to the subtotal
-        item.subtotal_with_GST = item.product_total * (Decimal('1') + GST_rate)
-        subtotal += item.subtotal_with_GST
-    subtotal = round(subtotal)
-    # Calculate GST amount for the entire cart
-    GST_amount = round(subtotal - (subtotal / (Decimal('1') + GST_rate)))
+    subtotal = sum(item.product_total for item in All_cart)
 
-    # Calculate grand total including GST and shipping
-    grandtotal = round(subtotal + GST_amount)
+        #  Define your GST rate as a Decimal (e.g., 0.18 for 18% GST)
+    # GST_rate = Decimal('0.05')
+
+        # Calculate the GST amount for the entire cart
+    GST_amount = subtotal * GST_rate
+    GST_amount=round(GST_amount,2)
+
+        # Calculate the grand total by adding the subtotal and GST amount
+    grand_total = float(subtotal + GST_amount)
+
+    # client = Client(auth=("YOUR_API_KEY", "YOUR_API_SECRET"))
+    payment = None  # Initialize payment variable to None   
     client = razorpay.Client(auth=("rzp_test_7iEeq4gBX0tDwL", "0lj2P8OpvtXavLC2xgOxl43C"))
-    payment = client.order.create({'amount':(grandtotal)*100, 'currency': 'INR','payment_capture': '1'})
+    client.set_app_details({"title": "My Django App", "version": "4.1.7"})
+    payment = client.order.create({'amount':(grand_total)*100, 'currency': 'INR','payment_capture': '1'}) 
     if request.method == 'POST':
-        Order(user=request.user,customer=selected_address,Book=(item.book),quantity=(item.quantity)).save()  
+        for cart_item in All_cart:  # Loop through cart items
+            Order.objects.create(
+                user=request.user,
+                customer=selected_address,
+                Book=cart_item.book,  # Use cart_item to access product
+                quantity=cart_item.quantity
+            )        
         cart_items.delete()
         return redirect('/')
-
-
     context = {
         'form1': form1,
         'cust_address': cust_address,
@@ -219,7 +228,7 @@ def checkoutview(request):
         'subtotal': subtotal,
         'GST': GST_amount,
         'payment':payment,
-        'grandtotal': grandtotal
+        'grand_total': grand_total
     }
 
     return render(request, 'shop-checkout.html', context)
