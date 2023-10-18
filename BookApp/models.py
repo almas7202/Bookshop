@@ -35,3 +35,30 @@ class Cart(models.Model):
         return ((self.book.price)*(self.quantity))
     
     
+class CustomerModel(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    fname = models.CharField(max_length=200)
+    lname = models.CharField(max_length=200)
+    email = models.EmailField()
+    mobile = models.IntegerField()
+    add1 = models.CharField(max_length=300)
+    add2 = models.CharField(max_length=300)
+    city = models.CharField(max_length=200)
+    state = models.CharField(max_length=200)
+    country = models.CharField(max_length=200,default='India')
+    zipcode = models.IntegerField() 
+    
+
+    objects = models.Manager()
+
+    def __str__(self):
+        return (self.fname +','+ self.add1 +','+ self.add2)
+
+step = (('Pending','Pending'),('Accepted','Accepted'),('Packing','Packing'),('Shipping','Shipping'),('Deliverd','Deliverd'))
+class Order(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    customer = models.ForeignKey(CustomerModel,on_delete=models.CASCADE)
+    Book = models.ForeignKey(Book,on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()
+    order_date = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(choices=step,max_length=200,default='Pending')
