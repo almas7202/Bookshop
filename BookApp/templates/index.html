@@ -40,10 +40,10 @@
 										<div class="swiper-content">
 											<div class="content-info">
 												<h6 class="sub-title" data-swiper-parallax="-10">BEST MANAGEMENT </h6>
-												<h1 class="title mb-0" data-swiper-parallax="-20">Think and Grow Rich
+												<h1 class="title mb-0" data-swiper-parallax="-20">{{random_book_2.title}}
 												</h1>
 												<ul class="dz-tags" data-swiper-parallax="-30">
-													<li><a href="javascript:void(0);">Napoleon Hill</a></li>
+													<li><a href="javascript:void(0);">{{random_book_2.authors}}</a></li>
 													<li><a href="javascript:void(0);">Business & Strategy</a></li>
 												</ul>
 												<p class="text mb-0" data-swiper-parallax="-40">It is a long established
@@ -51,13 +51,15 @@
 													page when looking at its layout. The point of using Lorem Ipsum is
 													that it has a more-or-less normal.</p>
 												<div class="price" data-swiper-parallax="-50">
-													<span class="price-num">$17.2</span>
-													<del>$15.25</del>
-													<span class="badge badge-danger">15% OFF</span>
+													<span class="price-num">₹{{random_book_2.price}}</span>
+													<!-- <del>$15.25</del> -->
+													<!-- <span class="badge badge-danger">15% OFF</span> -->
 												</div>
 												<div class="content-btn" data-swiper-parallax="-60">
-													<a class="btn btn-primary btnhover" href="books-grid-view.html">Buy
-														Now</a>
+													<a href="{% url 'add_cart' random_book_2.id %}"
+													class="btn btn-secondary box-btn btnhover btnhover2">
+													<i class="flaticon-shopping-cart-1 m-r10"></i> Add to Cart
+												</a>
 													<a class="btn border btnhover ms-4 text-white"
 														href="books-detail.html">See Details</a>
 												</div>
@@ -92,24 +94,25 @@
 										<div class="swiper-content">
 											<div class="content-info">
 												<h6 class="sub-title" data-swiper-parallax="-10">BEST SELLER</h6>
-												<h1 class="title mb-0" data-swiper-parallax="-20">Pushing Clouds</h1>
+												<h1 class="title mb-0" data-swiper-parallax="-20">{{random_book_1.title}}</h1>
 												<ul class="dz-tags" data-swiper-parallax="-30">
-													<li><a href="javascript:void(0);">Napoleon Hill</a></li>
-													<li><a href="javascript:void(0);">Business & Strategy</a></li>
+													<li><a href="javascript:void(0);">{{random_book_1.author}}</a></li>
+													<li><a href="javascript:void(0);">{{random_book_1.categories}}</a></li>
 												</ul>
 												<p class="text mb-0" data-swiper-parallax="-40">Lorem ipsum dolor sit
 													amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
 													ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
 													nostrud exercitation ullamco laboris</p>
 												<div class="price" data-swiper-parallax="-50">
-													<span class="price-num">$9.5</span>
-													<del>$12.0</del>
-													<span class="badge badge-danger">20% OFF</span>
+													<span class="price-num">₹{{random_book_1.price}}</span>
+													<!-- <del>$12.0</del> -->
+													<!-- <span class="badge badge-danger">20% OFF</span> -->
 												</div>
 												<div class="content-btn" data-swiper-parallax="-50">
-													<a class="btn btn-primary btnhover" href="books-grid-view.html">Buy
-														Now</a>
-													<a class="btn border btnhover ms-4 text-white"
+													<a href="{% url 'add_cart' random_book_1.id %}"
+													class="btn btn-secondary box-btn btnhover btnhover2">
+													<i class="flaticon-shopping-cart-1 m-r10"></i> Add to Cart
+												</a>													<a class="btn border btnhover ms-4 text-white"
 														href="books-detail.html">See Details</a>
 												</div>
 											</div>
@@ -146,26 +149,25 @@
 					<div class="swiper-slide">
 						<div class="books-card">
 							<div class="dz-media">
-								<img src="{% static 'images/books/book16.png' %}" alt="book">
+								{% if random_book_1.thumbnail != '' %}
+								<img src="{{ random_book_1.thumbnail }}" width="500" height="600">
+
+								{% else %}
+								<p class="no-image">No cover image available</p>
+								{% endif %}
 							</div>
 							<div class="dz-content">
-								<h5 class="title mb-0">Think and Grow Rich</h5>
+								<h5 class="title mb-0">{{random_book_1.title}}</h5>
 								<div class="dz-meta">
 									<ul>
-										<li>by Napoleon Hill</li>
+										<li>by {{random_book_1.author}}</li>
 									</ul>
 								</div>
 								<div class="book-footer">
 									<div class="price">
-										<span class="price-num">$9.5</span>
+										<span class="price-num">₹{{random_book_1.price}}</span>
 									</div>
-									<div class="rate">
-										<i class="flaticon-star text-yellow"></i>
-										<i class="flaticon-star text-yellow"></i>
-										<i class="flaticon-star text-yellow"></i>
-										<i class="flaticon-star text-yellow"></i>
-										<i class="flaticon-star text-yellow"></i>
-									</div>
+								
 								</div>
 							</div>
 						</div>
@@ -173,84 +175,30 @@
 					<div class="swiper-slide">
 						<div class="books-card">
 							<div class="dz-media">
-								<img src="{% static 'images/books/grid/book9.jpg' %}" alt="book">
+								{% if random_book_2.thumbnail != '' %}
+								<img src="{{ random_book_2.thumbnail }}" width="500" height="600">
+
+								{% else %}
+								<p class="no-image">No cover image available</p>
+								{% endif %}
 							</div>
 							<div class="dz-content">
-								<h5 class="title mb-0">Pushing Clouds</h5>
+								<h5 class="title mb-0">{{random_book_2.title}}</h5>
 								<div class="dz-meta">
 									<ul>
-										<li>by Jamet Sigh</li>
+										<li>by {{random_book_2.author}}</li>
 									</ul>
 								</div>
 								<div class="book-footer">
 									<div class="price">
-										<span class="price-num">$5.7</span>
+										<span class="price-num">₹{{random_book_2.price}}</span>
 									</div>
-									<div class="rate">
-										<i class="flaticon-star text-yellow"></i>
-										<i class="flaticon-star text-yellow"></i>
-										<i class="flaticon-star text-yellow"></i>
-										<i class="flaticon-star text-yellow"></i>
-										<i class="flaticon-star text-muted"></i>
-									</div>
+							
 								</div>
 							</div>
 						</div>
 					</div>
-					<div class="swiper-slide">
-						<div class="books-card">
-							<div class="dz-media">
-								<img src="{% static 'images/books/book16.png' %}" alt="book">
-							</div>
-							<div class="dz-content">
-								<h5 class="title mb-0">Think and Grow Rich</h5>
-								<div class="dz-meta">
-									<ul>
-										<li>by Napoleon Hill</li>
-									</ul>
-								</div>
-								<div class="book-footer">
-									<div class="price">
-										<span class="price-num">$9.5</span>
-									</div>
-									<div class="rate">
-										<i class="flaticon-star text-yellow"></i>
-										<i class="flaticon-star text-yellow"></i>
-										<i class="flaticon-star text-yellow"></i>
-										<i class="flaticon-star text-yellow"></i>
-										<i class="flaticon-star text-yellow"></i>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="swiper-slide">
-						<div class="books-card">
-							<div class="dz-media">
-								<img src="{% static 'images/books/grid/book9.jpg' %}" alt="book">
-							</div>
-							<div class="dz-content">
-								<h5 class="title mb-0">Pushing Clouds</h5>
-								<div class="dz-meta">
-									<ul>
-										<li>by Jamet Sigh</li>
-									</ul>
-								</div>
-								<div class="book-footer">
-									<div class="price">
-										<span class="price-num">$5.7</span>
-									</div>
-									<div class="rate">
-										<i class="flaticon-star text-yellow"></i>
-										<i class="flaticon-star text-yellow"></i>
-										<i class="flaticon-star text-yellow"></i>
-										<i class="flaticon-star text-yellow"></i>
-										<i class="flaticon-star text-muted"></i>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+					
 				</div>
 			</div>
 		</div>
@@ -291,7 +239,7 @@
 				<div class="swiper-container swiper-two">
 					<div class="swiper-wrapper">
 
-					{% if recommended_books %}
+						{% if recommended_books %}
 						{% for i in recommended_books %}
 						<div class="swiper-slide">
 							<div class="books-card style-1 wow fadeInUp" data-wow-delay="0.1s">
@@ -299,9 +247,9 @@
 									{% if i.thumbnail != '' %}
 									<img src="{{ i.thumbnail }}" width="500" height="600">
 
-						  {% else %}
-						  <p class="no-image">No cover image available</p>
-						  {% endif %}
+									{% else %}
+									<p class="no-image">No cover image available</p>
+									{% endif %}
 								</div>
 								<div class="dz-content">
 									<h4 class="title">
@@ -311,7 +259,7 @@
 									<span class="price">₹{{i.price}}</span>
 									<!-- Adjust the button placement and styling -->
 									<div class="action-buttons">
-										<a href="shop-cart.html" class="btn btn-secondary btnhover btnhover2">
+										<a href="/cart/" class="btn btn-secondary btnhover btnhover2">
 											<i class="flaticon-shopping-cart-1 m-r10"></i> Add to cart
 										</a>
 									</div>
@@ -319,8 +267,38 @@
 							</div>
 						</div>
 						{% endfor %}
-					
-					{% endif %}
+
+						<!-- {% else %}
+						{% for i in random_books %}
+						<div class="swiper-slide">
+							<div class="books-card style-1 wow fadeInUp" data-wow-delay="0.1s">
+								<div class="dz-media">
+									{% if i.thumbnail != '' %}
+									<img src="{{ i.thumbnail }}" width="500" height="600">
+
+									{% else %}
+									<p class="no-image">No cover image available</p>
+									{% endif %}
+								</div>
+								<div class="dz-content">
+									<h4 class="title">
+										
+										<span class="title-text">{{ i.title }}</span>
+									</h4>
+									<span class="price">₹{{i.price}}</span>
+								
+									<div class="action-buttons">
+										<a href="/cart/" class="btn btn-secondary btnhover btnhover2">
+											<i class="flaticon-shopping-cart-1 m-r10"></i> Add to cart
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						{% endfor %}
+ -->
+
+						{% endif %}
 					</div>
 				</div>
 			</div>
@@ -393,15 +371,15 @@
 				<div class="swiper-container books-wrapper-3 swiper-four">
 					<div class="swiper-wrapper">
 
-						
-						
-						
+
+
+
 						{% for book in books %}
 						<div class="swiper-slide">
 							<div class="books-card style-3 wow fadeInUp" data-wow-delay="0.1s">
 								<div class="dz-media">
 									{% if book.thumbnail != '' %}
-									          <img src="{{ book.thumbnail }}" width="500" height="600">
+									<img src="{{ book.thumbnail }}" width="500" height="600">
 
 									{% else %}
 									<p class="no-image">No cover image available</p>
@@ -423,10 +401,10 @@
 											<!-- <del>$12.0</del> -->
 										</div>
 
-										
+
 									</div>
 								</div>
-							
+
 							</div>
 						</div>
 

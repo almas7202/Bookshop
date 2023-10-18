@@ -137,7 +137,7 @@
 
 										{% endfor %} -->
 
-										<form method="post" action="{% url 'checkoutview' %}">
+										<form method="POST">
 											{% csrf_token %}
 											{% for add in cust_address %}
 											<div class="your-order-table table-responsive border">
@@ -167,7 +167,7 @@
 											</div>
 											{% endfor %}
 											<!-- <input type="submit" class="btn btn-primary btnhover mb-3 mt-3" value="Submit Address"> -->
-											<!-- </form> -->
+										<!-- </form> -->
 
 
 									</div>
@@ -217,7 +217,7 @@
 							</div>
 						</div>
 						<div class="col-lg-6">
-							<form class="shop-form widget">
+							<!-- <form class="shop-form widget"> -->
 								<h4 class="widget-title">Order Total</h4>
 								<table class="table-bordered check-tbl mb-4">
 									<tbody>
@@ -241,19 +241,22 @@
 								</table>
 
 								<div class="form-group">
+
+							
 									<script src="https://checkout.razorpay.com/v1/checkout.js"
-										data-key="rzp_test_7iEeq4gBX0tDwL" data-amount="{{amount}}" data-currency="INR"
-										data-order_id="{{payment.id}}" data-buttontext="Pay with Razorpay"
-										data-name="BookApp" data-description="Book Recommendation System"
-										data-image="{% static 'assets/img/logo/logo.png' %}" data-prefill.name="PC"
-										data-prefill.email="mediequip@mail.com" data-theme.color="#4e97fd">
-										</script>
-
-
+									data-key="rzp_test_7iEeq4gBX0tDwL" data-amount="{{grandtotal}}" data-currency="INR"
+									data-order_id="{{payment.id}}" data-buttontext="Pay with Razorpay"
+									data-name="BookApp" data-description="Book Recommendation System"
+									data-prefill.name="PC"
+									data-prefill.email="mediequip@mail.com" data-theme.color="#4e97fd">
+									</script>
 									<button class="btn btn-primary btnhover" type="submit">Place Order Now </button>
 									
 								</div>
 							</form>
+
+
+							
 						</div>
 					</div>
 				</div>
@@ -264,9 +267,6 @@
 
 		<button class="scroltop" type="button"><i class="fas fa-arrow-up"></i></button>
 	</div>
-
-
-
 	{% endblock body %}
 </body>
 

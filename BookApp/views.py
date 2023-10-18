@@ -26,7 +26,9 @@ def baseview(request):
 def generate_random_price():
     return round(random.uniform(350, 850))  # Generates a random price with two decimal places
 
-def search_books(request):
+
+
+def indexview(request): 
     query = request.GET.get('q', '')  # Get the search query from the GET request, default to an empty string
 
     # Perform a case-insensitive search across multiple fields
@@ -45,62 +47,16 @@ def search_books(request):
         # If a query is provided, get recommendations for the first book in the search results
         if books:
             recommended_books = get_recommendations(books.first().title, num_recommendations=15)
-
-    return render(request, 'index.html', {'query': query, 'books': books, 'recommended_books': recommended_books})
-
-
-def indexview(request): 
-    print(request.user)
-    google_books_api_key = 'AIzaSyBOgiz9kM8HnX1vtgT8106HgGSOUQ2e7Y4'
-      # Replace with your Google Books API key
-    url = f'https://www.googleapis.com/books/v1/volumes?q=Harry+Potter&key={google_books_api_key}&maxResults=10'   
-    response = requests.get(url)
-    data = response.json()
-    # Extract the list of books from the API response
-    books = data.get('items', [])
-    # Add random prices to the fetched books
-    for book in books:
-        book['price'] = generate_random_price()
-    categories = ['comedy', 'adventure', 'thriller']
-    random_category = random.choice(categories)  # Select a random category
-    # Construct the API URL with the selected category
-    url1 = f'https://www.googleapis.com/books/v1/volumes?q=subject:{random_category}&key={google_books_api_key}&maxResults=10'
-    response = requests.get(url1)
-    data = response.json()
-    # Extract the list of books from the API response
-    r_books = data.get('items', [])
-    # Add random prices to the fetched random category books
-    for r_book in r_books:
-        r_book['price'] = generate_random_price()
-
-    context = {'books': books, 'r_books': r_books}
+    print(recommended_books)
+    random_book_1 = Book.objects.order_by('?').first()
+    # Get the second random book while ensuring it's different from the first one
+    random_book_2 = Book.objects.exclude(pk=random_book_1.pk).order_by('?').first()
+    random_books = Book.objects.order_by('?')[:10]
+    context={'random_books':random_books, 'random_book_1': random_book_1,
+            'random_book_2': random_book_2,'query': query, 'books': books, 'recommended_books': recommended_books}    
     return render(request, 'index.html', context)
 
-
-
-# def indexview(request): 
-    google_books_api_key = 'AIzaSyBOgiz9kM8HnX1vtgT8106HgGSOUQ2e7Y4'
-    url = f'https://www.googleapis.com/books/v1/volumes?q=Harry+Potter&key={google_books_api_key}&maxResults=10'
-    response = requests.get(url)
-    data = response.json()
-    # Extract the list of books from the API response
-    books = data.get('items', [])
-    categories = ['comedy', 'adventure', 'thriller']
-    random_category = random.choice(categories)  # Select a random category
-
-    # Construct the API URL with the selected category
-    url1 = f'https://www.googleapis.com/books/v1/volumes?q=subject:{random_category}&key={google_books_api_key}&maxResults=10'
-
-    response = requests.get(url1)
-    data = response.json()
-
-    # Extract the list of books from the API response
-    r_books = data.get('items', [])
-
-    context = {'books': books,'r_books':r_books}
-
-    return render(request,'index.html',context)
-
+    
 def registerview(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
@@ -159,25 +115,24 @@ def cartview(request):
                 cart_item = Cart.objects.get(user=request.user, book_id=product_id)
                 cart_item.quantity = updated_quantity
                 cart_item.save()
+        subtotal = sum(item.product_total for item in All_cart)
 
-        for item in All_cart:
-            # Calculate the GST for each item and add it to the subtotal
-            item.subtotal_with_GST = item.product_total * (Decimal('1') + GST_rate)
-            subtotal += item.subtotal_with_GST
+        #  Define your GST rate as a Decimal (e.g., 0.18 for 18% GST)
+        GST_rate = Decimal('0.05')
 
-        subtotal=round(subtotal)
-        # Calculate GST amount for the entire cart
-        GST_amount = round(subtotal - (subtotal / (Decimal('1') + GST_rate)))
+        # Calculate the GST amount for the entire cart
+        GST_amount = subtotal * GST_rate
+        GST_amount=round(GST_amount,2)
 
-        # Calculate grand total including GST and shipping
-        grandtotal = round(subtotal +GST_amount)
-
+        # Calculate the grand total by adding the subtotal and GST amount
+        grand_total = subtotal + GST_amount
+        
         context = {
             'cart_data': All_cart,
             'count': cart_count,
             'subtotal': subtotal,
             'GST': GST_amount,
-            'grandtotal': grandtotal
+            'grand_total': grand_total
         }
 
         return render(request, 'shop-cart.html', context)
@@ -215,7 +170,8 @@ def checkoutview(request):
                 print(f"Error saving data: {e}")
                 messages.error(request, 'There was an error while saving the data')
         else:
-            # Handle form errors
+            # Handle form er
+            # rors
             errors = form1.errors.as_data()
             for field, field_errors in errors.items():
                 for error in field_errors:
@@ -248,11 +204,10 @@ def checkoutview(request):
 
     # Calculate grand total including GST and shipping
     grandtotal = round(subtotal + GST_amount)
-
+    client = razorpay.Client(auth=("rzp_test_7iEeq4gBX0tDwL", "0lj2P8OpvtXavLC2xgOxl43C"))
+    payment = client.order.create({'amount':(grandtotal)*100, 'currency': 'INR','payment_capture': '1'})
     if request.method == 'POST':
-        Order(user=request.user,customer=selected_address,Book=(item.book),quantity=(item.quantity)).save()
-        client = razorpay.Client(auth=("rzp_test_7iEeq4gBX0tDwL", "0lj2P8OpvtXavLC2xgOxl43C"))
-        payment = client.order.create({'amount':(grandtotal)*100, 'currency': 'INR','payment_capture': '1'})  
+        Order(user=request.user,customer=selected_address,Book=(item.book),quantity=(item.quantity)).save()  
         cart_items.delete()
         return redirect('/')
 
@@ -263,6 +218,7 @@ def checkoutview(request):
         'All_cart': All_cart,
         'subtotal': subtotal,
         'GST': GST_amount,
+        'payment':payment,
         'grandtotal': grandtotal
     }
 
