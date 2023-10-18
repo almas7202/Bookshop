@@ -266,3 +266,5 @@ def view_cart(request):
     context={'cart_items': cart_items, 'total_price': total_price}
     return render(request, 'cart_view.html',context )
 
+def bookdetailsview(request):
+    return render(request,'books-detail.html')
