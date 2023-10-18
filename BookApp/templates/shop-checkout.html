@@ -137,7 +137,7 @@
 
 										{% endfor %} -->
 
-										<form method="POST">
+										<form method="POST" action="{% url 'checkoutview' %}" id="checkout-form">
 											{% csrf_token %}
 											{% for add in cust_address %}
 											<div class="your-order-table table-responsive border">
@@ -152,7 +152,8 @@
 																			value="{{ add.id }}">
 																	</div>
 																	<div class="col-10">
-																		<h4><strong>{{ add.fname }}, {{add.lname}}</strong></h4>
+																		<h4><strong>{{ add.fname }},
+																				{{add.lname}}</strong></h4>
 																	</div>
 																</div>
 																{{ add.add1 }}<br>
@@ -241,15 +242,15 @@
 							</table>
 
 							<div class="form-group">
-							
+
 								<button id="rzp-button1">Pay with Razorpay</button>
 								<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 								<script>
-									 var grand_total = "{{ grand_total }}";  // Get the grand_total from Django context
-    								var amount_in_paise = Math.round(grand_total * 100);
+									var grand_total = "{{ grand_total }}";  // Get the grand_total from Django context
+									var amount_in_paise = Math.round(grand_total * 100);
 									var options = {
 										"key": "rzp_test_7iEeq4gBX0tDwL", // Enter the Key ID generated from the Dashboard
-										"amount":  amount_in_paise ,
+										"amount": amount_in_paise,
 										"currency": "INR",
 										"name": "BookApp",
 										"description": "Test Transaction",
@@ -260,7 +261,7 @@
 											alert(response.razorpay_order_id);
 											alert(response.razorpay_signature)
 										},
-										
+
 										"notes": {
 											"address": "Razorpay Corporate Office"
 										},
@@ -284,10 +285,56 @@
 									}
 								</script>
 
-								<button class="btn btn-primary btnhover" type="submit">Place Order Now </button>
+								<button id="rzp-button1" type="button">Pay and Place Order</button>
 
 							</div>
 							</form>
+
+							<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+							<script>
+								var form = document.getElementById('checkout-form');
+								var rzpButton = document.getElementById('rzp-button1');
+
+								rzpButton.addEventListener('click', function () {
+									// Your Razorpay payment initiation code here
+									var grand_total = "{{ grand_total }}";  // Get the grand_total from Django context
+									var amount_in_paise = Math.round(grand_total * 100);
+									var options = {
+										"key": "rzp_test_7iEeq4gBX0tDwL", // Enter the Key ID generated from the Dashboard
+										"amount": amount_in_paise,
+										"currency": "INR",
+										"name": "BookApp",
+										"description": "Test Transaction",
+										"image": "https://example.com/your_logo",
+										"order_id": "{{payment.id}}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+										"handler": function (response) {
+											alert(response.razorpay_payment_id);
+											alert(response.razorpay_order_id);
+											alert(response.razorpay_signature);
+
+											// After successful payment, submit the form
+											form.submit();
+										},
+										"notes": {
+											"address": "Razorpay Corporate Office"
+										},
+										"theme": {
+											"color": "#3399cc"
+										}
+									};
+									var rzp1 = new Razorpay(options);
+									rzp1.on('payment.failed', function (response) {
+										alert(response.error.code);
+										alert(response.error.description);
+										alert(response.error.source);
+										alert(response.error.step);
+										alert(response.error.reason);
+										alert(response.error.metadata.order_id);
+										alert(response.error.metadata.payment_id);
+									});
+									rzp1.open();
+								});
+							</script>
 
 
 

@@ -274,7 +274,7 @@
 												<li><a href="books-list.html">{{book.categories}}</a></li>
 
 											</ul>
-											<h4 class="title mb-0"><a href="books-list.html">{{book.title}}</a></h4>
+											<h4 class="title mb-0"><a href="{% url 'bookdetails' book.id %}">{{book.title}}</a></h4>
 										</div>
 										<div class="price">
 											<span class="price-num text-primary">₹{{book.price}}</span>

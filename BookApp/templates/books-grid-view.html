@@ -116,15 +116,15 @@
 					</div>
 
 					<div class="row book-grid-row">
-						
-						
-						
+
+
+
 						{% for book in page_obj %}
 						<div class="col-book style-1">
 							<div class="dz-shop-card style-1">
 								<div class="dz-media">
 									{% if book.thumbnail != '' %}
-									          <img src="{{ book.thumbnail }}" width="500" height="600">
+									<img src="{{ book.thumbnail }}" width="500" height="600">
 
 									{% else %}
 									<p class="no-image">No cover image available</p>
@@ -137,7 +137,7 @@
 									</label>
 								</div>
 								<div class="dz-content">
-									<h5 class="title"><a href="books-grid-view.html">{{ book.title }}</a></h5>
+									<h5 class="title"><a href="{% url 'bookdetails' book.id %}">{{ book.title }}</a></h5>
 									<ul class="dz-tags">
 										<li><a href="books-grid-view.html">{{ book.category }}</a></li>
 										<!-- <li><a href="books-grid-view.html">SCIENCE</a></li> -->
@@ -156,13 +156,13 @@
 										</div>
 
 										{% if isbn.id %}
-    <a href="{% url 'add_to_cart' isbn.id %}" class="btn btn-secondary box-btn btnhover btnhover2">
-        <i class="flaticon-shopping-cart-1 m-r10"></i> Add to Cart
-    </a>
-{% endif %}
+										<a href="{% url 'add_to_cart' isbn.id %}"
+											class="btn btn-secondary box-btn btnhover btnhover2">
+											<i class="flaticon-shopping-cart-1 m-r10"></i> Add to Cart
+										</a>
+										{% endif %}
 
 										<a href="{% url 'add_cart' book.id %}"
-
 											class="btn btn-secondary box-btn btnhover btnhover2">
 											<i class="flaticon-shopping-cart-1 m-r10"></i> Add to Cart
 										</a>
@@ -170,8 +170,8 @@
 								</div>
 							</div>
 						</div>
-						
-						
+
+
 						{% endfor %}
 					</div>
 					<div class="row page mt-0">
@@ -182,13 +182,16 @@
 							<nav aria-label="Blog Pagination">
 								<ul class="pagination style-1 p-t20">
 									{% if page_obj.has_previous %}
-										<li class="page-item"><a class="page-link prev" href="?page={{ page_obj.previous_page_number }}">Prev</a></li>
+									<li class="page-item"><a class="page-link prev"
+											href="?page={{ page_obj.previous_page_number }}">Prev</a></li>
 									{% endif %}
 									{% for i in page.paginator.page_range %}
-										<li class="page-item {% if i == page.number %}active{% endif %}"><a class="page-link active" href="?page={{ i }}">{{i}}</a></li>
+									<li class="page-item {% if i == page.number %}active{% endif %}"><a
+											class="page-link active" href="?page={{ i }}">{{i}}</a></li>
 									{% endfor %}
 									{% if page_obj.has_next %}
-										<li class="page-item"><a class="page-link next" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+									<li class="page-item"><a class="page-link next"
+											href="?page={{ page_obj.next_page_number }}">Next</a></li>
 									{% endif %}
 								</ul>
 							</nav>

@@ -159,81 +159,144 @@ def booklistview(request):
     return render(request,'books-list.html',context)
 
 
-def checkoutview(request):    
+# def checkoutview(request):    
+#     if request.method == 'POST':
+#         form1 = CustomerAddressForm(request.POST)
+#         if form1.is_valid():
+#             try:
+#                 customer = form1.save(commit=False)
+#                 customer.user = request.user
+#                 customer.save()
+#                 return HttpResponseRedirect('/checkout/')  # Redirect to the same page
+#             except IntegrityError as e:
+#                 print(f"Error saving data: {e}")
+#                 messages.error(request, 'There was an error while saving the data')
+#         else:
+#             # Handle form er
+#             # rors
+#             errors = form1.errors.as_data()
+#             for field, field_errors in errors.items():
+#                 for error in field_errors:
+#                     messages.error(request, f"{field}: {error}")
+#     else:
+#         form1 = CustomerAddressForm()
+
+#     selected_address_id = None  # Initialize selected_address_id
+#     cart_items = Cart.objects.filter(user=request.user)
+#     # Handle address selection
+#     if request.method == 'POST' and 'selected_address' in request.POST:
+#         selected_address_id = request.POST['selected_address']
+#         selected_address = CustomerModel.objects.get(id=selected_address_id)
+#         # You can now use `selected_address` in your further processing
+#     cust_address = CustomerModel.objects.filter(user=request.user)
+#     All_cart = Cart.objects.filter(user=request.user)
+#     subtotal = Decimal('0')
+#     GST_rate = Decimal('0.05')  # 5% GST rate
+#     grandtotal = Decimal('0')
+#     subtotal = sum(item.product_total for item in All_cart)
+#     GST_amount = subtotal * GST_rate
+#     GST_amount=round(GST_amount,2)
+#     grand_total = float(subtotal + GST_amount)
+#     payment = None  # Initialize payment variable to None   
+#     client = razorpay.Client(auth=("rzp_test_7iEeq4gBX0tDwL", "0lj2P8OpvtXavLC2xgOxl43C"))
+#     client.set_app_details({"title": "My Django App", "version": "4.1.7"})
+#     payment = client.order.create({'amount':(grand_total)*100, 'currency': 'INR','payment_capture': '1'}) 
+#     if request.method == 'POST':
+#         for cart_item in All_cart:  # Loop through cart items
+#             Order.objects.create(
+#                 user=request.user,
+#                 customer=selected_address,
+#                 Book=cart_item.book,  # Use cart_item to access product
+#                 quantity=cart_item.quantity
+#             )        
+#         cart_items.delete()
+#         print(cart_items)
+#         return redirect('/')
+#     context = {
+#         'form1': form1,
+#         'cust_address': cust_address,
+#         'All_cart': All_cart,
+#         'subtotal': subtotal,
+#         'GST': GST_amount,
+#         'payment':payment,
+#         'grand_total': grand_total
+#     }
+#     return render(request, 'shop-checkout.html', context)
+
+def checkoutview(request):
+    # Initialize variables
+    form1 = CustomerAddressForm()
+    selected_address = None
+    cust_address = CustomerModel.objects.filter(user=request.user)
+    All_cart = Cart.objects.filter(user=request.user)
+    subtotal = Decimal('0')
+    GST_rate = Decimal('0.05')  # 5% GST rate
+    GST_amount = Decimal('0')
+    grand_total = Decimal('0')
+    payment = None
+
     if request.method == 'POST':
+        # Handle form submission for adding a customer address
         form1 = CustomerAddressForm(request.POST)
         if form1.is_valid():
             try:
                 customer = form1.save(commit=False)
                 customer.user = request.user
                 customer.save()
-                return HttpResponseRedirect('/checkout/')  # Redirect to the same page
+                return HttpResponseRedirect('/checkout/')
             except IntegrityError as e:
                 print(f"Error saving data: {e}")
                 messages.error(request, 'There was an error while saving the data')
         else:
-            # Handle form er
-            # rors
+            # Handle form errors
             errors = form1.errors.as_data()
             for field, field_errors in errors.items():
                 for error in field_errors:
                     messages.error(request, f"{field}: {error}")
-    else:
-        form1 = CustomerAddressForm()
 
-    selected_address_id = None  # Initialize selected_address_id
-    cart_items = Cart.objects.filter(user=request.user)
-    # Handle address selection
-    if request.method == 'POST' and 'selected_address' in request.POST:
+    if 'selected_address' in request.POST:
+        # Handle address selection
         selected_address_id = request.POST['selected_address']
-        selected_address = CustomerModel.objects.get(id=selected_address_id)
-        # You can now use `selected_address` in your further processing
+        try:
+            selected_address = CustomerModel.objects.get(id=selected_address_id)
+        except CustomerModel.DoesNotExist:
+            selected_address = None
 
-    cust_address = CustomerModel.objects.filter(user=request.user)
-    All_cart = Cart.objects.filter(user=request.user)
-    
-    subtotal = Decimal('0')
-    GST_rate = Decimal('0.05')  # 5% GST rate
-    grandtotal = Decimal('0')
+    # Calculate the subtotal, GST, and grand total
+    for cart_item in All_cart:
+        subtotal += cart_item.product_total
+    GST_amount = round(subtotal * GST_rate, 2)
+    grand_total = subtotal + GST_amount
 
-    subtotal = sum(item.product_total for item in All_cart)
-
-        #  Define your GST rate as a Decimal (e.g., 0.18 for 18% GST)
-    # GST_rate = Decimal('0.05')
-
-        # Calculate the GST amount for the entire cart
-    GST_amount = subtotal * GST_rate
-    GST_amount=round(GST_amount,2)
-
-        # Calculate the grand total by adding the subtotal and GST amount
-    grand_total = float(subtotal + GST_amount)
-
-    # client = Client(auth=("YOUR_API_KEY", "YOUR_API_SECRET"))
-    payment = None  # Initialize payment variable to None   
-    client = razorpay.Client(auth=("rzp_test_7iEeq4gBX0tDwL", "0lj2P8OpvtXavLC2xgOxl43C"))
-    client.set_app_details({"title": "My Django App", "version": "4.1.7"})
-    payment = client.order.create({'amount':(grand_total)*100, 'currency': 'INR','payment_capture': '1'}) 
     if request.method == 'POST':
-        for cart_item in All_cart:  # Loop through cart items
+        # Handle order creation and cart items deletion
+        for cart_item in All_cart:
             Order.objects.create(
                 user=request.user,
                 customer=selected_address,
-                Book=cart_item.book,  # Use cart_item to access product
+                Book=cart_item.book,
                 quantity=cart_item.quantity
-            )        
-        cart_items.delete()
+            )
+        All_cart.delete()
         return redirect('/')
+
+    # Initialize the Razorpay payment
+    client = razorpay.Client(auth=("rzp_test_7iEeq4gBX0tDwL", "0lj2P8OpvtXavLC2xgOxl43C"))
+    client.set_app_details({"title": "My Django App", "version": "4.1.7"})
+    payment = client.order.create({'amount': int(grand_total * 100), 'currency': 'INR', 'payment_capture': '1'})
+
     context = {
         'form1': form1,
         'cust_address': cust_address,
+        'selected_address': selected_address,
         'All_cart': All_cart,
         'subtotal': subtotal,
         'GST': GST_amount,
-        'payment':payment,
+        'payment': payment,
         'grand_total': grand_total
     }
-
     return render(request, 'shop-checkout.html', context)
+
 
 
 def wishlistview(request):
@@ -277,5 +340,7 @@ def view_cart(request):
     context={'cart_items': cart_items, 'total_price': total_price}
     return render(request, 'cart_view.html',context )
 
-def bookdetailsview(request):
-    return render(request,'books-detail.html')
+def bookdetailsview(request,id):
+    get_product=Book.objects.get(id=id)
+    context={'get_product':get_product}
+    return render(request,'books-detail.html',context)
