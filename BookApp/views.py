@@ -1,3 +1,4 @@
+# Trial and Error
 from django.shortcuts import render,redirect
 from .form import *
 from django.contrib.auth import authenticate, login, logout
@@ -19,7 +20,6 @@ import random
 
 def generate_random_price():
     return round(random.uniform(350, 850), 2)  # Generates a random price with two decimal places
-
 
 
 def baseview(request):
@@ -240,6 +240,8 @@ def wishlistview(request):
     return render(request,'wishlist.html')
 
 def profileview(request):
+
+    return render(request,'my-profile.html')
     return render(request,'my-profile.html')
     
 
@@ -275,3 +277,5 @@ def view_cart(request):
     context={'cart_items': cart_items, 'total_price': total_price}
     return render(request, 'cart_view.html',context )
 
+def bookdetailsview(request):
+    return render(request,'books-detail.html')

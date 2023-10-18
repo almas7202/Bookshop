@@ -61,4 +61,4 @@ class Order(models.Model):
     Book = models.ForeignKey(Book,on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
     order_date = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(choices=step,max_length=200,default='Pending')    
+    status = models.CharField(choices=step,max_length=200,default='Pending')
