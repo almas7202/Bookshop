@@ -203,13 +203,13 @@
 										<tr>
 											<td class="product-item-img">
 												{% if i.Book.thumbnail != '' %}
-												<img src="{{ i.book.thumbnail}}">
+												<img src="{{ i.Book.thumbnail}}">
 												{% else %}
 												<p class="no-image">No cover image available</p>
 												{% endif %}
 											</td>
-											<td class="product-item-name">{{i.book.title}}</td>
-											<td class="product-price">{{i.book.price}}</td>
+											<td class="product-item-name">{{i.Book.title}}</td>
+											<td class="product-price">{{i.Book.price}}</td>
 										</tr>
 										{% endfor %}
 

@@ -278,11 +278,11 @@ def checkoutview(request):
                 quantity=cart_item.quantity
             )
         All_cart.delete()
-        return redirect('/')
+        return redirect('/order/')
 
     # Initialize the Razorpay payment
     client = razorpay.Client(auth=("rzp_test_7iEeq4gBX0tDwL", "0lj2P8OpvtXavLC2xgOxl43C"))
-    client.set_app_details({"title": "My Django App", "version": "4.1.7"})
+    client.set_app_details({"title": "My Book App", "version": "4.1.7"})
     payment = client.order.create({'amount': int(grand_total * 100), 'currency': 'INR', 'payment_capture': '1'})
 
     context = {
@@ -303,8 +303,6 @@ def wishlistview(request):
     return render(request,'wishlist.html')
 
 def profileview(request):
-
-    return render(request,'my-profile.html')
     return render(request,'my-profile.html')
     
 
@@ -344,3 +342,12 @@ def bookdetailsview(request,id):
     get_product=Book.objects.get(id=id)
     context={'get_product':get_product}
     return render(request,'books-detail.html',context)
+
+
+def orderview(request):
+    order_get=Order.objects.filter(user=request.user)
+    for i in order_get:
+        print(i.Book.title)
+    print(order_get)
+    context={'order_get':order_get}
+    return render(request,'shop-order.html',context)
