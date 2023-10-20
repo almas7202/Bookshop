@@ -29,7 +29,6 @@ def generate_random_price():
 
 def indexview(request): 
     query = request.GET.get('q', '')  # Get the search query from the GET request, default to an empty string4
-    # genre = request.GET.get('q', '')  # Get the genre query from the GET request, default to an empty string
 
 
     # Perform a case-insensitive search across multiple fields
@@ -38,19 +37,13 @@ def indexview(request):
         Q(authors__icontains=query) |
         Q(description__icontains=query)
     )
-    # if genre:
-    #     books = books.filter(genre__icontains=genre)
-
     # Apply order_by to the queryset before slicing
     books = books.order_by('title')[:20]
-
     recommended_books = []  # Initialize an empty list for recommendations
-
     if query:
-        # If a query is provided, get recommendations for the first book in the search results
         if books:
             recommended_books = get_recommendations(books.first().title, num_recommendations=15)
-
+    print("recommended_books ==============>>>",recommended_books)
     random_book_1 = Book.objects.order_by('?').first()
     # Get the second random book while ensuring it's different from the first one
     random_book_2 = Book.objects.exclude(pk=random_book_1.pk).order_by('?').first()

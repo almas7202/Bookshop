@@ -55,6 +55,7 @@ def get_recommendations(book_title, num_recommendations=5):
                 'thumbnail': book.thumbnail,
                 'price': book.price,
                 'ratingsCount': book.ratingsCount,
+                'id': book.id,
             })
         print(recommended_books)
         return recommended_books

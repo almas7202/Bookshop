@@ -245,23 +245,22 @@
 								<div class="dz-content">
 									<h4 class="title">
 										<!-- Apply CSS to limit the title width -->
-										<a class="title-text">{{i.title}}</a>
+										<a class="title-text"><a href="{% url 'bookdetails' i.id %}">{{i.title}}</a>
 									</h4>
 									<span class="price">₹{{i.price}}</span>
 									<!-- Adjust the button placement and styling -->
 									<div class="action-buttons">
 										
 										
-											
-											{% comment %}
+							
 												
-											
-											
-											<a href="{% url 'add_cart' book.id %}"
-											class="btn btn-secondary box-btn btnhover btnhover2">
-											<i class="flaticon-shopping-cart-1 m-r10"></i> Add to Cart
+												<a href="{% url 'add_cart' i.id %}"
+												class="btn btn-secondary box-btn btnhover btnhover2">
+												<i class="flaticon-shopping-cart-1 m-r10"></i> Add to Cart
+												
+
 										</a>
-										{% endcomment %}
+									
 									
 									</div>
 								</div>
