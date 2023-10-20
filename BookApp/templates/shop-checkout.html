@@ -48,53 +48,53 @@
 										{% csrf_token %}
 										<div class="row">
 											<div class="form-group col-md-6">
-												{{form1.fname}}
+												{{ form1.fname }}
 											</div>
 											<div class="form-group col-md-6">
-												<!-- <input type="text" class="form-control" placeholder="Last Name">
-											 -->
-												{{form1.lname}}
+												{{ form1.lname }}
 											</div>
 										</div>
 										<div class="row">
 											<div class="form-group col-md-6">
-												<!-- <input type="email" class="form-control" placeholder="Email"> -->
-												{{form1.email}}
+												{{ form1.email }}
 											</div>
 											<div class="form-group col-md-6">
-												<!-- <input type="text" class="form-control" placeholder="Phone"> -->
-												{{form1.mobile}}
+												{{ form1.mobile }}
 											</div>
 										</div>
-
 										<div class="form-group">
-											<!-- <input type="text" class="form-control" placeholder="Address"> -->
-											{{form1.add1}}
+											{{ form1.add1 }}
 										</div>
 										<div class="row">
 											<div class="form-group col-md-6">
-												<!-- <input type="text" class="form-control" placeholder="Apartment, suite, unit etc."> -->
-												{{form1.add2}}
+												{{ form1.add2 }}
 											</div>
 											<div class="form-group col-md-6">
-												<!-- <input type="text" class="form-control" placeholder="Town / City"> -->
-												{{form1.city}}
+												{{ form1.city }}
 											</div>
 										</div>
 										<div class="row">
 											<div class="form-group col-md-6">
-												<!-- <input type="text" class="form-control" placeholder="State / County"> -->
-												{{form1.state}}
+												{{ form1.state }}
 											</div>
 											<div class="form-group col-md-6">
-												<!-- <input type="text" class="form-control" placeholder="Postcode / Zip"> -->
-												{{form1.zipcode}}
+												{{ form1.zipcode }}
 											</div>
 										</div>
-
-										<button class="btn btn-primary btnhover mb-3" type="submit"> Save <i
-												class="fa fa-arrow-circle-o-down"></i></button>
+								
+										<button class="btn btn-primary btnhover mb-3" type="submit"> Save <i class="fa fa-arrow-circle-o-down"></i></button>
 									</form>
+								
+									{% if form1.errors %}
+									<div class="alert alert-danger">
+										<strong>Error:</strong> Please correct the following issues:
+										<ul>
+											{% for error in form1.errors %}
+												<li>{{ error }}</li>
+											{% endfor %}
+										</ul>
+									</div>
+									{% endif %}
 								</div>
 							</div>
 							<div class="col-lg-6 col-md-6">
@@ -202,14 +202,14 @@
 
 										<tr>
 											<td class="product-item-img">
-												{% if i.Book.thumbnail != '' %}
-												<img src="{{ i.Book.thumbnail}}">
+												{% if i.book.thumbnail != '' %}
+												<img src="{{ i.book.thumbnail}}">
 												{% else %}
 												<p class="no-image">No cover image available</p>
 												{% endif %}
 											</td>
-											<td class="product-item-name">{{i.Book.title}}</td>
-											<td class="product-price">{{i.Book.price}}</td>
+											<td class="product-item-name">{{i.book.title}}</td>
+											<td class="product-price">{{i.book.price}}</td>
 										</tr>
 										{% endfor %}
 
